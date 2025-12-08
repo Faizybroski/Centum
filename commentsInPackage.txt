@@ -1,0 +1,1 @@
+// "copy-standalone-assets": "powershell -Command \"Copy-Item -Recurse -Force .next\\static .next\\standalone\\.next\\static; Copy-Item -Recurse -Force public .next\\standalone\\public\"",

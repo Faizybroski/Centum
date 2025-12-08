@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "postbuild": "npm run copy-standalone-assets",
-    "copy-standalone-assets": "powershell -Command \"Copy-Item -Recurse -Force .next\\static .next\\standalone\\.next\\static; Copy-Item -Recurse -Force public .next\\standalone\\public\"",
+    "copy-standalone-assets": "node scripts/copyAssets.mjs",
     "start": "next start",
     "start:standalone": "node .next/standalone/server.js",
     "deploy": "pm2 startOrRestart ecosystem.config.js",
