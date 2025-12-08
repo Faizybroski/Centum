@@ -5,22 +5,9 @@ import { CheckCircle2, CircleCheck } from 'lucide-react'
 // import { motion } from 'framer-motion'
 // import { containerVariants, slideLeftVariant, slideRightVariant } from '@/utils/animation.util'
 import React from 'react'
-import { Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
-
-function Icon({ id, open }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      className={`${id === open ? "rotate-180" : ""} h-5 w-5 transition-transform`}
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-    </svg>
-  );
-}
+// import { Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
+// import {Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react/components/Accordion";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 
 const items = [
   {
@@ -54,9 +41,9 @@ const items = [
 ]
 
 export default function ActionPlan() {
-  const [open, setOpen] = React.useState(0);
+  const [open, setOpen] = React.useState(0)
 
-  const handleOpen = (value) => setOpen(open === value ? 0 : value);
+  const handleOpen = (value: any) => setOpen(open === value ? 0 : value)
   return (
     <section className="py-12 sm:py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,35 +52,46 @@ export default function ActionPlan() {
         </div>
         <div className="space-y-4">
           {items.map((item, index) => {
-            const id = index + 1; // unique ID per accordion
+            const id = index + 1 // unique ID per accordion
 
             return (
-              <Accordion
-                key={id}
-                className="rounded-md border px-6"
-                open={open === id}
-                icon={<Icon id={id} open={open} />}
-              >
-                <div className="flex items-center justify-center">
-                  <CircleCheck className="mr-4" />
+              // <Accordion
+              //   id={id.toString()}
+              //   key={id}
+              //   className="rounded-md border px-6"
+              //   open={open === id}
+              //   icon={<Icon id={id} open={open} />}
+              // >
+              //   <div className="flex items-center justify-center">
+              //     <CircleCheck className="mr-4" />
 
-                  <AccordionHeader
-                    className="border-b-0"
-                    onClick={() => handleOpen(id)}
-                  >
-                    {item.title}
-                  </AccordionHeader>
-                </div>
+              //     <AccordionHeader
+              //       className="border-b-0"
+              //       onClick={() => handleOpen(id)}
+              //     >
+              //       {item.title}
+              //     </AccordionHeader>
+              //   </div>
 
-                <AccordionBody>
-                  {item.text}
-                </AccordionBody>
+              //   <AccordionBody>
+              //     {item.text}
+              //   </AccordionBody>
+              // </Accordion>
+              <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="rounded-md border px-6">
+                <AccordionItem value={id.toString()}>
+                  <AccordionTrigger className="flex items-center justify-between border-b-0 py-4">
+                    <div className="flex items-center gap-3">
+                      <CircleCheck className="text-green-600 h-5 w-5" />
+                      <span>{item.title}</span>
+                    </div>
+                  </AccordionTrigger>
+
+                  <AccordionContent className="pb-4">{item.text}</AccordionContent>
+                </AccordionItem>
               </Accordion>
-            );
+            )
           })}
         </div>
-
-
 
         {/* <div className="space-y-4 sm:space-y-6">
           {items.map((item, index) => (
