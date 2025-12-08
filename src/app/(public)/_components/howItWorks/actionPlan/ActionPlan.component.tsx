@@ -62,7 +62,7 @@ const items = [
 export default function ActionPlan() {
   const [open, setOpen] = React.useState(0);
 
-  const handleOpen = (value) => setOpen(open === value ? 0 : value);
+  const handleOpen = (value: any) => setOpen(open === value ? 0 : value);
   return (
     <section className="py-12 sm:py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
