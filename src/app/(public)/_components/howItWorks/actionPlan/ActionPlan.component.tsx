@@ -7,7 +7,13 @@ import { CheckCircle2, CircleCheck } from 'lucide-react'
 import React from 'react'
 import { Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
 
-function Icon({ id, open }) {
+interface IconProps {
+  id: number | string;  // pick what matches your code
+  open: number | string;
+}
+
+
+function Icon({ id, open }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
