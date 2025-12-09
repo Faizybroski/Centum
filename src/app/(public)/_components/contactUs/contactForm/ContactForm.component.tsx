@@ -42,87 +42,82 @@ export default function ContactForm() {
 
 
   return (
-    <section className="py-12 sm:py-16 bg-white">
-      <div className="max-w-7xl mx-auto bg-white/80 shadow-2xl rounded-lg p-16">
+    <section className="py-12 sm:py-16 bg-white max-w-5xl mx-auto my-12 rounded-lg px-16 shadow-[0_0_15px_rgba(0,0,0,0.15)]">
+      <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           {/* Left: Contact Form */}
           <motion.div variants={slideLeftVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
             
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Fill The Form</h2>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Fill The Form</h2>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input id="name" placeholder='Name *' {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input id="email" type="email" placeholder='Email *' {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name *</FormLabel>
-                          <FormControl>
-                            <Input id="name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email *</FormLabel>
-                          <FormControl>
-                            <Input id="email" type="email" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone</FormLabel>
-                        <FormControl>
-                          <Input id="phone" type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="subject"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subject *</FormLabel>
-                        <FormControl>
-                          <Input id="subject" maxLength={50} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Message *</FormLabel>
-                        <FormControl>
-                          <Textarea id="message" rows={6} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full h-12 bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]" disabled={isLoading}>
-                    Send Message
-                  </Button>
-                </form>
-              </Form>
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input id="phone" type="text" placeholder='Phone' {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input id="subject" placeholder='Subject' maxLength={50} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea id="message" placeholder="Message" rows={6} cols={10} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full h-12 bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]" disabled={isLoading}>
+                  Send Message
+                </Button>
+              </form>
+            </Form>
             
             <div className="space-y-8 mt-6 flex justify-between items-start">
               <div>
@@ -162,14 +157,14 @@ export default function ContactForm() {
           {/* Right: Contact Info */}
           <motion.div variants={slideRightVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
             <div className="w-full h-full mx-auto rounded-2xl overflow-hidden border bg-white">
-      {/* <img
-        src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317716.6064449053!2d-0.43124327626421655!3d51.5286070141754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2s!4v1765023621353!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade'
-        alt="Map"
-        className="w-full h-full object-cover"
-      /> */}
+              {/* <img
+                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317716.6064449053!2d-0.43124327626421655!3d51.5286070141754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2s!4v1765023621353!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade'
+                alt="Map"
+                className="w-full h-full object-cover"
+              /> */}
 
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317716.6064449053!2d-0.43124327626421655!3d51.5286070141754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2s!4v1765023621353!5m2!1sen!2s" className='w-full h-full'></iframe>
-    </div>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317716.6064449053!2d-0.43124327626421655!3d51.5286070141754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2s!4v1765023621353!5m2!1sen!2s" className='w-full h-full'></iframe>
+            </div>
           </motion.div>
         </div>
       </div>

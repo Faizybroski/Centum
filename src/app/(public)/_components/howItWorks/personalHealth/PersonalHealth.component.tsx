@@ -3,18 +3,18 @@ import { Card } from '@/components/ui/card'
 import React from 'react'
 import { motion } from 'framer-motion'
 import { containerVariants, fadeUpVariant, slideLeftVariant } from '@/utils/animation.util'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-react'
 
 type BiomarkerType = 'optimal' | 'average' | 'attention'
 
-interface ChartData {
-  month: string
-  type: BiomarkerType
-  value: number
-}
+// interface ChartData {
+//   month: string
+//   type: BiomarkerType
+//   value: number
+// }
 
 const COLORS: Record<BiomarkerType, string> = {
   optimal: '#22c55e', // Tailwind green-500
@@ -23,20 +23,68 @@ const COLORS: Record<BiomarkerType, string> = {
 }
 
 export default function PersonalHealth() {
-  const data: ChartData[] = [
-    { month: 'Jan', type: 'optimal', value: 80 },
-    { month: 'Feb', type: 'optimal', value: 75 },
-    { month: 'Mar', type: 'average', value: 40 },
-    { month: 'Apr', type: 'optimal', value: 85 },
-    { month: 'May', type: 'attention', value: 25 },
-    { month: 'Jun', type: 'optimal', value: 90 },
-    { month: 'Jul', type: 'optimal', value: 78 },
-    { month: 'Aug', type: 'average', value: 45 },
-    { month: 'Sep', type: 'optimal', value: 88 },
-    { month: 'Oct', type: 'attention', value: 20 },
-    { month: 'Nov', type: 'optimal', value: 82 },
-    { month: 'Dec', type: 'optimal', value: 87 },
-  ]
+  // const data: ChartData[] = [
+  //   { month: 'Jan', type: 'optimal', value: 80 },
+  //   { month: 'Feb', type: 'optimal', value: 75 },
+  //   { month: 'Mar', type: 'average', value: 40 },
+  //   { month: 'Apr', type: 'optimal', value: 85 },
+  //   { month: 'May', type: 'attention', value: 25 },
+  //   { month: 'Jun', type: 'optimal', value: 90 },
+  //   { month: 'Jul', type: 'optimal', value: 78 },
+  //   { month: 'Aug', type: 'average', value: 45 },
+  //   { month: 'Sep', type: 'optimal', value: 88 },
+  //   { month: 'Oct', type: 'attention', value: 20 },
+  //   { month: 'Nov', type: 'optimal', value: 82 },
+  //   { month: 'Dec', type: 'optimal', value: 87 },
+  // ]
+  const POINTS = [
+    {
+      year: 2021,
+      q1: { pos: 1, color: COLORS.optimal },
+      q2: { pos: 2, color: COLORS.attention },
+      q3: { pos: 3, color: COLORS.average }
+    },
+    {
+      year: 2022,
+      q1: { pos: 1.5, color: COLORS.optimal },
+      q2: { pos: 2.3, color: COLORS.average },
+      q3: { pos: 3, color: COLORS.attention }
+    },
+    {
+      year: 2023,
+      q1: { pos: 0.7, color: COLORS.average },
+      q2: { pos: 1.3, color: COLORS.attention },
+      q3: { pos: 3, color: COLORS.optimal }
+    },
+    {
+      year: 2024,
+      q1: { pos: 1.5, color: COLORS.optimal },
+      q2: { pos: 1.3, color: COLORS.attention },
+      q3: { pos: 3, color: COLORS.average }
+    },
+    {
+      year: 2025,
+      q1: { pos: 1, color: COLORS.attention },
+      q2: { pos: 1.8, color: COLORS.average },
+      q3: { pos: 2.2, color: COLORS.optimal }
+    },
+  ];
+
+  const optimal = POINTS.map(p => ({
+    year: p.year,
+    value: [p.q1, p.q2, p.q3].find(q => q.color === COLORS.optimal)?.pos ?? null
+  }));
+
+  const average = POINTS.map(p => ({
+    year: p.year,
+    value: [p.q1, p.q2, p.q3].find(q => q.color === COLORS.average)?.pos ?? null
+  }));
+
+  const attention = POINTS.map(p => ({
+    year: p.year,
+    value: [p.q1, p.q2, p.q3].find(q => q.color === COLORS.attention)?.pos ?? null
+  }));
+
   return (
     <section className="py-12 sm:py-16 bg-[#16AF9D] bg-gradient-to-b from-[#FFFFFF]/10 to-[#0B3029]/90">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,9 +133,9 @@ export default function PersonalHealth() {
               </h3>
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-green-500 text-white text-center p-2 rounded text-sm font-medium">Optimal Range</div>
-                  <div className="bg-orange-500 text-white text-center p-2 rounded text-sm font-medium">Average Range</div>
-                  <div className="bg-red-500 text-white text-center p-2 rounded text-sm font-medium">Needs Attention</div>
+                  <div className="bg-green-500 text-white text-center p-2 rounded text-sm font-medium"><span className='text-lg'>75</span><span className="text-xs">Optimal Range</span></div>
+                  <div className="bg-orange-500 text-white text-center p-2 rounded text-sm font-medium"><span className='text-lg'>10</span><span className="text-xs">Average Range</span></div>
+                  <div className="bg-red-500 text-white text-center p-2 rounded text-sm font-medium"><span className='text-lg'>15</span><span className="text-xs">Needs Attention</span></div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-gray-900">42.3</div>
@@ -106,28 +154,28 @@ export default function PersonalHealth() {
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">VO2 max</span>
-                  <span className="text-sm font-medium text-green-600">50 ng/mL</span>
+                  <span className="text-xs">VO2 max</span>
+                  <span className="text-xs font-medium text-green-600">50 ng/mL</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Glucose Fasted</span>
-                  <span className="text-sm font-medium">85 mg/dL</span>
+                  <span className="text-xs">Glucose Fasted</span>
+                  <span className="text-xs font-medium">85 mg/dL</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Hemoglobin</span>
-                  <span className="text-sm font-medium">14.2 g/dL</span>
+                  <span className="text-xs">Hemoglobin</span>
+                  <span className="text-xs font-medium">14.2 g/dL</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Testosterone</span>
-                  <span className="text-sm font-medium text-red-600">320 ng/dL</span>
+                  <span className="text-xs">Testosterone</span>
+                  <span className="text-xs font-medium text-red-600">320 ng/dL</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Thyroid TSH</span>
-                  <span className="text-sm font-medium">2.1 μIU/mL</span>
+                  <span className="text-xs">Thyroid TSH</span>
+                  <span className="text-xs font-medium">2.1 μIU/mL</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Magnesium</span>
-                  <span className="text-sm font-medium text-orange-600">1.8 mg/dL</span>
+                  <span className="text-xs">Magnesium</span>
+                  <span className="text-xs font-medium text-orange-600">1.8 mg/dL</span>
                 </div>
               </div>
             </Card>
@@ -140,21 +188,62 @@ export default function PersonalHealth() {
             <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Biomarkers Progress Over Time</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-
-                  <Bar
-                    dataKey="value"
-                    // Dynamically set color based on type
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    label={false}
-                    shape={(props: any) => {
-                      const { x, y, width, height, payload } = props
-                      return <rect x={x} y={y} width={width} height={height} fill={COLORS[payload.type as BiomarkerType]} ry={4} />
-                    }}
+                <LineChart width={700} height={400}   margin={{ top: 20, right: 30, left: 20, bottom: 20 }} >
+                  <XAxis
+                    dataKey="year"
+                    type="number"
+                    domain={[2021, 2025]}
+                    tickCount={5}
+                    padding={{ left: 20, right: 20 }}
                   />
-                </BarChart>
+
+                  <YAxis
+                    type="number"
+                    domain={[1, 3]}
+                    ticks={[1, 2, 3]}
+                    tickFormatter={(v) => (v === 1 ? "Q1" : v === 2 ? "Q2" : "Q3")}
+                    padding={{ top: 20, bottom: 20 }}
+                  />
+
+                  {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                  {/* <Tooltip /> */}
+
+                  {/* Optimal (green) */}
+                  <Line
+                    data={optimal}
+                    type="monotone"
+                    dataKey="value"
+                    stroke={COLORS.optimal}
+                    strokeWidth={3}
+                    fill={COLORS.optimal}
+                    dot={{ r: 3 }}
+                    connectNulls
+                  />
+
+                  {/* Average (orange) */}
+                  <Line
+                    data={average}
+                    type="monotone"
+                    dataKey="value"
+                    stroke={COLORS.average}
+                    fill={COLORS.average}
+                    strokeWidth={3}
+                    dot={{ r: 3 }}
+                    connectNulls
+                  />
+
+                  {/* Need Attention (red) */}
+                  <Line
+                    data={attention}
+                    type="monotone"
+                    dataKey="value"
+                    stroke={COLORS.attention}
+                    fill={COLORS.attention}
+                    strokeWidth={3}
+                    dot={{ r: 3 }}
+                    connectNulls
+                  />
+                </LineChart>
               </ResponsiveContainer>
             </div>
 

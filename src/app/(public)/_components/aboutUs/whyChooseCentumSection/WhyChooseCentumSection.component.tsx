@@ -33,27 +33,27 @@ export default function WhyChooseCentumSection() {
     <section className="py-12 sm:py-16 lg:py-20 bg-gray-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
-          <motion.h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6" variants={fadeDownVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
+          <motion.h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6" variants={fadeDownVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
             Why Choose Centum?
           </motion.h2>
 
           <motion.p className="text-lg text-gray-600 max-w-3xl mx-auto" variants={slideRightVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
-            Discover the key advantages that make Centum your trusted health optimization partner
+            Discover the key advantages that make Centum your trusted health optimization partner.
           </motion.p>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-4xl mx-auto space-y-4 shadow-[0_0_15px_rgba(0,0,0,0.15)] px-16 py-10 rounded-lg">
           {reasons.map(({ title, description }, idx) => (
             <motion.div key={idx} className="flex items-start gap-4" variants={slideRightVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
               <motion.div className="flex-shrink-0" variants={fadeInBadge} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center mt-1">
-                  <Check className="h-4 w-4 text-white" />
+                <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center mt-1">
+                  <Check className="h-3 w-3 text-white" />
                 </div>
               </motion.div>
 
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
-                <p className="text-gray-600 leading-relaxed">{description}</p>
+                <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
               </div>
             </motion.div>
           ))}

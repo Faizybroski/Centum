@@ -21,7 +21,7 @@ export default function Page() {
         <WhatIsCentumSection />
 
         {/* Core Values Section */}
-        <CoreValuesSection />
+        {/* <CoreValuesSection /> */}
 
         {/* How Does It Work Section */}
         <HowDoesItWorkSection />

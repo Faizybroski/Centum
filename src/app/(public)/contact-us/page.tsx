@@ -8,7 +8,7 @@ export const generateMetadata = async () =>
   })
 export default function page() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <div className="min-h-screen ">
       {/* Hero Section */}
       <HeroSection />
 
