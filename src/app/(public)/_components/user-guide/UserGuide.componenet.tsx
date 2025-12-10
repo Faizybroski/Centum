@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -55,6 +56,9 @@ const steps = [
 const checklistItems = ['Complete your profile', 'Upload your lab results', 'Review your dashboard', 'Explore AI-driven insights', 'Read the Privacy & Security Policy and FAQs']
 
 export default function UserGuide() {
+  const [open, setOpen] = React.useState(0)
+
+  const handleOpen = (value: any) => setOpen(open === value ? 0 : value)
   return (
     <section className="py-12 sm:py-16 lg:py-20 ">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -71,21 +75,43 @@ export default function UserGuide() {
 
         {/* Collapsible Steps */}
         <div className="space-y-4">
-          {steps.map((step, idx) => (
-            <Collapsible key={idx} className="bg-white rounded-lg shadow-md border">
-              <CollapsibleTrigger className="group w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-900 text-md sm:text-lg hover:no-underline focus:no-underline">
-                {step.title}
-                <ChevronDown className="h-5 w-5 transition-transform duration-300 group-data-[state=open]:rotate-180" />
-              </CollapsibleTrigger>
-              <CollapsibleContent className="px-4 pb-4 text-gray-700">
-                <ul className="list-disc list-inside space-y-2">
-                  {step.items.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </CollapsibleContent>
-            </Collapsible>
-          ))}
+          {steps.map((step, idx) => {
+            const id = idx + 1
+            return (
+              <>
+                <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="bg-white rounded-lg shadow-sm border">
+                  <AccordionItem value={id.toString()}>
+                    <AccordionTrigger className="flex items-center justify-between group border-b-0 w-full px-4 py-3 text-left font-semibold text-gray-900 text-md sm:text-lg hover:no-underline focus:no-underline hover:cursor-pointer">
+                      <div className="flex items-center gap-3 group-data-[state=open]:text-primary">
+                        <span>{step.title}</span>
+                      </div>
+                    </AccordionTrigger>
+
+                    <AccordionContent className="px-4 pb-4 text-gray-700">
+                      <ul className="list-disc list-inside space-y-2">
+                        {step.items.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                {/* <Collapsible key={idx} className="bg-white rounded-lg shadow-md border">
+                <CollapsibleTrigger className="group w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-900 text-md sm:text-lg hover:no-underline focus:no-underline">
+                  {step.title}
+                  <ChevronDown className="h-5 w-5 transition-transform duration-300 group-data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-4 pb-4 text-gray-700">
+                  <ul className="list-disc list-inside space-y-2">
+                    {step.items.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                </CollapsibleContent>
+              </Collapsible> */}
+              </>
+            )
+          })}
         </div>
 
         {/* Onboarding Checklist */}

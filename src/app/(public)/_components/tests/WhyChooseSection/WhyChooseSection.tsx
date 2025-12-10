@@ -8,14 +8,14 @@ export default function WhyChooseSection() {
 
                 {/* LEFT CARD */}
                 <div className="bg-white border rounded-xl p-8 shadow-sm">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         Why Choose Our Testing?
                     </h2>
 
-                    <ul className="space-y-5">
+                    <ul className="space-y-3">
                         <li className="flex items-center gap-3">
                             <div className="bg-[#0B3029]/10 rounded-full p-2">
-                                <Shield className="h-5 w-5 text-[#0B3029]" />
+                                <Shield className="h-4 w-4 text-[#0B3029]" />
                             </div>
                             <div>
                                 <p className="font-bold text-gray-900">Certified Labs</p>
@@ -27,7 +27,7 @@ export default function WhyChooseSection() {
 
                         <li className="flex items-center gap-3">
                             <div className="bg-[#0B3029]/10 rounded-full p-2">
-                                <Activity className="h-5 w-5 text-[#0B3029]" />
+                                <Activity className="h-4 w-4 text-[#0B3029]" />
                             </div>
                             <div>
                                 <p className="font-bold text-gray-900">Fast Results</p>
@@ -39,7 +39,7 @@ export default function WhyChooseSection() {
 
                         <li className="flex items-center gap-3">
                             <div className="bg-[#0B3029]/10 rounded-full p-2">
-                                <FileCheck className="h-5 w-5 text-[#0B3029]" />
+                                <FileCheck className="h-4 w-4 text-[#0B3029]" />
                             </div>
                             <div>
                                 <p className="font-bold text-gray-900">Expert Analysis</p>
@@ -54,9 +54,8 @@ export default function WhyChooseSection() {
                 {/* RIGHT CARD */}
                 <div className="rounded-xl p-8 shadow-sm text-white bg-gradient-to-r from-[#16AF9D] to-[#0B3029]">
                     <h2 className="text-xl font-semibold mb-3">Need Help Choosing?</h2>
-                    <p className="text-sm text-white/80 mb-8 max-w-sm">
-                        Our healthcare specialists can recommend the right tests based on
-                        your health goals and medical history.
+                    <p className="text-md text-white/80 mb-8">
+                        Our healthcare specialists can recommend the right tests based on your health goals and medical history.
                     </p>
 
                     <Button className="w-full bg-white text-gray-900 font-medium py-2 rounded-xl hover:bg-gray-100 transition">

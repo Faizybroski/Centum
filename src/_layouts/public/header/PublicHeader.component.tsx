@@ -40,7 +40,7 @@ function PublicHeader() {
 
           <nav className="hidden md:flex items-center space-x-8">
             {NavbarOptions.map((option) => (
-              <Link key={option.name} href={option.href} className={`block text-black hover:text-[#16AF9D] font-semibold text-md py-1 ${option.href === pathName ? 'text-[#16AF9D] border-b-2 border-[#16AF9D]' : ''}`}>
+              <Link key={option.name} href={option.href} className={`block text-black hover:text-primary font-semibold text-md py-1 ${option.href === pathName ? 'border-b-2 border-primary' : ''}`}>
                 {option.name}
               </Link>
             ))}
@@ -53,7 +53,7 @@ function PublicHeader() {
             <div className="hidden md:flex items-center gap-3">
               {isLoggedIn ? (
                 <Link href={role === 'customer' ? paths.customerDashboard() : paths.adminDashboard()}>
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                  <Button size="sm" className="bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] w-38">
                     Dashboard
                   </Button>
                 </Link>
@@ -61,7 +61,7 @@ function PublicHeader() {
                 <>
                   <Link href={paths.login()}>
                     <Button size="sm" className="text-black bg-transparent hover:bg-transparent hover:text-[#16AF9D]">
-                      <CircleUserRound className='mr-2 hover:text-black' /> Sign Up
+                      <CircleUserRound className='mr-2 hover:text-black' /> Sign In
                     </Button>
                   </Link>
                   <Link href={paths.signup()}>

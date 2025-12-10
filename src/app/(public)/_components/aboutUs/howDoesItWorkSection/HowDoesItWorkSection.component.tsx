@@ -66,12 +66,12 @@ export default function HowDoesItWorkSection() {
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true }}
-                  className="flex flex-col items-center"
+                  className="flex flex-col items-center group"
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mb-4 shadow-sm">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{title}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-primary">{title}</h3>
                   <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
 
                   {/* ===== MOBILE ARROW (always vertical except last) ===== */}

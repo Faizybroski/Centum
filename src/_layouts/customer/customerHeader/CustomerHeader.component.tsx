@@ -39,23 +39,17 @@ export default function CustomerHeader() {
   ]
 
   return (
-    <header className="bg-black border-b border-gray-800 sticky top-0 z-40">
+    <header className="bg-white border-b border-px border-border sticky top-0 z-40">
       <Container>
         <div className="flex justify-between items-center mx-auto h-20">
           {/* Left side - Logo and Sidebar Toggle */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-4">
-              {/* Logo */}
-              <Link href={'/'}>
-                <div className="cursor-pointer flex items-center h-20 bg-black px-3 py-1">
-                  <Image src="/assets/icons/centum_logo_white.svg" alt="Centum Health" className="h-full w-auto object-contain" height={750} width={750} priority />
-                </div>
-              </Link>
-            </div>
+          <div className="flex flex-col px-3 py-1 h-20 justify-center">
+            <h2 className="text-lg font-bold">Welcome Back, {user ? user.userProfile.full_name : 'U'}</h2>
+            <p className="text-sm text-gray-500 mt-1">Here's what's happening with your health today</p>
           </div>
 
           {/* Center - Desktop Navigation */}
-          <nav className="hidden lg:flex gap-3 absolute left-1/2 transform -translate-x-1/2">
+          {/* <nav className="hidden lg:flex gap-3 absolute left-1/2 transform -translate-x-1/2">
             {navigationItems.map((item) => {
               return (
                 <Link key={item.path} href={item.path} className={`flex items-center rounded-lg gap-2 px-3 py-2 text-md ${isActive(item.path) ? 'bg-green-400/20 text-green-400' : 'text-white hover:text-gray-300'}`}>
@@ -64,14 +58,14 @@ export default function CustomerHeader() {
                 </Link>
               )
             })}
-          </nav>
+          </nav> */}
 
           {/* Right side - Mobile Menu, Profile */}
           <div className="flex items-center gap-2 sm:gap-4 pr-4 sm:pr-6 lg:pr-8">
             {/* Mobile Menu Button */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="lg:hidden h-9 w-9 p-0 text-white hover:text-gray-300 hover:bg-gray-800">
+                <Button variant="ghost" size="sm" className="lg:hidden h-9 w-9 p-0 text-black hover:text-white hover:bg-primary">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>

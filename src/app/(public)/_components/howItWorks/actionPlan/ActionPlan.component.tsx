@@ -77,11 +77,11 @@ export default function ActionPlan() {
               //     {item.text}
               //   </AccordionBody>
               // </Accordion>
-              <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="rounded-md border px-6">
+              <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="bg-white rounded-lg shadow-sm px-6 border">
                 <AccordionItem value={id.toString()}>
-                  <AccordionTrigger className="flex items-center justify-between border-b-0 py-4">
-                    <div className="flex items-center gap-3">
-                      <CircleCheck className="text-green-600 h-5 w-5" />
+                  <AccordionTrigger className="flex items-center justify-between border-b-0 py-4 group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">
+                    <div className="flex items-center gap-3 group-data-[state=open]:text-primary">
+                      <CircleCheck className="text-primary h-5 w-5" />
                       <span>{item.title}</span>
                     </div>
                   </AccordionTrigger>

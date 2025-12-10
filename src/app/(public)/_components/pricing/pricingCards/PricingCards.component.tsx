@@ -87,12 +87,12 @@ export default function PricingCards() {
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start divide-y md:divide-y-0 md:divide-x-0 ">
           {pricingTiers.map((tier, index) => (
             <div
               key={tier.name}
-              className={`relative group bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit ${
-                tier.isPopular ? 'border-[#0B3029] bg-[#0B3029]/5 scale-105' : 'border-gray-200 hover:border-[#0B3029]/50'
+              className={`relative group bg-white hover:rounded-2xl hover:shadow-lg hover:border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit ${
+                tier.isPopular ? 'hover:border-primary bg-primary/5' : 'hover:border-[#0B3029]/50'
               }`}
             >
               {/* Popular Badge */}

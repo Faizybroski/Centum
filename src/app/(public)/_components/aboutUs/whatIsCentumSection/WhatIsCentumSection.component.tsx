@@ -61,7 +61,7 @@ export default function WhatIsCentumSection() {
               <div className="p-4 bg-primary/10 rounded-full w-16 h-16 mx-auto mb-4 sm:mb-6 flex items-center justify-center group-hover:rotate-10 transition-transform duration-300 ease-out">
                 <Icon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-600" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 group-hover:text-green-600">{title}</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 group-hover:text-primary">{title}</h3>
               <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{description}</p>
             </motion.div>
           ))}

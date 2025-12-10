@@ -61,7 +61,7 @@ export const faqs: FAQ[] = [
     answer: (
       <>
         Please review our full{' '}
-        <a href={paths.privacy()} className="text-blue-600 hover:underline">
+        <a href={paths.privacy()} className="text-primary hover:underline">
           Privacy Policy
         </a>
         .

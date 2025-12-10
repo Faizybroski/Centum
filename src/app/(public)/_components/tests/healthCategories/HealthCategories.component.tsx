@@ -147,27 +147,37 @@ export default function HealthCategories() {
                     </div>
 
                     <Collapsible open={open} onOpenChange={setOpen}>
-                      <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
+                      <div className="columns-2 gap-4 text-xs sm:text-sm text-gray-600 [column-fill:balance]">
+                        {/* Main markers */}
                         {category.markers.map((marker, idx) => (
-                          <li key={idx} className="text-gray-600">
+                          <div key={idx} className="break-inside-avoid mb-2">
                             • {marker}
-                          </li>
+                          </div>
                         ))}
 
-                        <CollapsibleContent>
+                        {/* Collapsible content */}
+                        <CollapsibleContent className="contents">
                           {category.moreMarkers?.map((marker, idx) => (
-                            <li key={idx + category.markers.length} className="text-gray-600 my-2">
+                            <div key={idx + category.markers.length} className="break-inside-avoid mb-2">
                               • {marker}
-                            </li>
+                            </div>
                           ))}
                         </CollapsibleContent>
 
+                        {/* More / Show less button */}
                         {Array.isArray(category.moreMarkers) && (
                           <CollapsibleTrigger asChild>
-                            <li className="text-blue-600 font-medium cursor-pointer select-none">{open ? 'Show less' : `+ ${category.moreMarkers?.length} more`}</li>
+                            <div
+                              className={`
+                                text-blue-600 font-medium cursor-pointer select-none break-inside-avoid mt-1
+                                ${category.markers.length % 2 === 0 ? 'col-span-full block w-full' : ''}
+                              `}
+                            >
+                              {open ? 'Show less' : `+ ${category.moreMarkers.length} more`}
+                            </div>
                           </CollapsibleTrigger>
                         )}
-                      </ul>
+                      </div>
                     </Collapsible>
                   </Card>
                 )
