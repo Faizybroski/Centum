@@ -20,10 +20,10 @@ export default function DashboardLayout() {
   const { exportReportToPDF, loading } = useExportHealthReport()
 
   return (
-    <div className="p-3 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="p-3 md:py-8 md:px-0">
+      <div className="max-w-8xl mx-auto">
         {/* Welcome Header */}
-        <DashboardHeader title={`Welcome back, ${userProfile?.full_name || 'Patient'}`} subtitle="Your health insights dashboard" />
+        {/* <DashboardHeader title={`Welcome back, ${userProfile?.full_name || 'Patient'}`} subtitle="Your health insights dashboard" /> */}
         {isSuccess && dashboardData && (
           <div className="flex justify-end">
             <button className="text-primary px-4 py-2 rounded cursor-pointer" disabled={loading} onClick={() => exportReportToPDF(dashboardData)}>

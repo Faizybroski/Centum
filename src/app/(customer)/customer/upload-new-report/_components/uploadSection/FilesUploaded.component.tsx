@@ -14,11 +14,17 @@ import { useRouterTransition } from '@/hooks/useRouterTransition.hook'
 export default function FilesUploadedSection({
   uploadedFiles,
   reportTitle,
+  reportDate,
+  reportCategory,
+  reportNotes,
   setUploadedFiles,
   uploadingFile,
 }: {
   uploadedFiles: File[]
   reportTitle: string
+  reportDate: Date
+  reportCategory: string
+  reportNotes: string
   setUploadedFiles: React.Dispatch<React.SetStateAction<File[]>>
   uploadingFile: boolean
 }) {

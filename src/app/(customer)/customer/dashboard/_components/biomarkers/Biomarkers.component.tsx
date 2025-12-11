@@ -32,14 +32,23 @@ export default function Biomarkers({ data }: { data: UserDashboardDTO | undefine
 
   return (
     <div className="lg:col-span-4">
-      <Card className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group h-full">
+      <Card className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
         <CardContent className="p-6 relative">
-          <BioMakersHeader totalMarkers={getTotalBiomarkerCount(data?.good_biomarkers, data?.normal_biomarkers, data?.critical_biomarkers)} percentage={percentages?.good || 0} />
+          {/* <BioMakersHeader totalMarkers={getTotalBiomarkerCount(data?.good_biomarkers, data?.normal_biomarkers, data?.critical_biomarkers)} percentage={percentages?.good || 0} /> */}
+          <BioMakersHeader />
 
-          <BiomarkerRange label="Optimal Range" color="green" value={getBiomarkerCount(data?.good_biomarkers)} percentage={percentages?.good || 0} category="good" onClick={() => handleBiomarkerRange('good_biomarkers')} />
+          <div className='flex flex-col mb-5 space-y-1'>
+            <span className='text-2xl font-bold'>
+              {percentages?.good}%
+            </span>
+            <span className='text-sm font-medium text-gray-700'>
+              Optimal Range
+            </span>
+          </div>
+
+          <BiomarkerRange label="Optimal Range" value={getBiomarkerCount(data?.good_biomarkers)} percentage={percentages?.good || 0} category="good" onClick={() => handleBiomarkerRange('good_biomarkers')} />
           <BiomarkerRange
             label="Average Range"
-            color="orange"
             value={getBiomarkerCount(data?.normal_biomarkers)}
             percentage={percentages?.normal || 0}
             category="average"
@@ -48,7 +57,6 @@ export default function Biomarkers({ data }: { data: UserDashboardDTO | undefine
           />
           <BiomarkerRange
             label="Needs Attention"
-            color="red"
             value={getBiomarkerCount(data?.critical_biomarkers)}
             percentage={percentages?.critical || 0}
             category="bad"
@@ -57,8 +65,8 @@ export default function Biomarkers({ data }: { data: UserDashboardDTO | undefine
           />
 
           {/* View All Button */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <Button variant="ghost" size="sm" className="w-full text-blue-600 hover:text-blue-700 hover:bg-blue-50" onClick={() => handleViewAllBiomarkers('all')}>
+          <div className="mt-4 pt-4">
+            <Button variant="ghost" size="sm" className="w-full rounded-lg bg-gray-100 border border-gray-200 text-sm font-medium text-gray-700 hover:text-primary/70 hover:bg-primary/10" onClick={() => handleViewAllBiomarkers('all')}>
               View All Biomarkers
             </Button>
           </div>

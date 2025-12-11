@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { useUpdateVo2MaxMutation } from '@/redux/services/dashboard.api'
 import { useReduxSelector } from '@/hooks/redux.hook'
 import { getVo2Category, Sex } from './vo2.utils'
+import { Heart } from 'lucide-react'
 
 export default function VO2Maxcard({ vo2Max = '0', chronologicalAge }: { vo2Max: string | number; chronologicalAge?: number }) {
   const { gender } = useReduxSelector((s) => s.user.userProfile)
@@ -63,14 +64,23 @@ export default function VO2Maxcard({ vo2Max = '0', chronologicalAge }: { vo2Max:
 
   return (
     <div>
-      <Card className={`text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 ${vo2Category.bgClass || 'bg-blue-500'}`}>
-        <CardContent className="p-6 text-center">
-          <h3 className="text-3xl font-bold mb-2">VO2 MAX</h3>
-          <div className="text-4xl font-bold mb-2 min-h-2.5">{displayedVo2 > 0 ? displayedVo2.toFixed(1) : '0'}</div>
-          <p className={`text-sm font-semibold mb-4 text-white`}>{vo2Category.label}</p>
-          <Button variant="outline" size="sm" className="bg-white/10 hover:bg-white/20 text-white border-white/30 hover:border-white/50" onClick={() => setShowVo2MaxModal(true)}>
-            Manage
-          </Button>
+      <Card className={`text-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]`}>
+        <CardContent className="p-6">
+          <div className="flex justify-between">
+            <h3 className="text-sm mb-2 flex gap-3 items-center">
+              <Heart className="w-6 h-6" />
+              VO2 MAX
+            </h3>{' '}
+            <Button className="h-7 px-4 py-0 text-xs bg-white/10 hover:bg-white/20 font-normal text-white border-white/30 hover:border-white/50" onClick={() => setShowVo2MaxModal(true)}>
+              Manage
+            </Button>
+          </div>
+          <div className="text-4xl font-bold mb-5 min-h-2.5">
+            <span>{displayedVo2 > 0 ? displayedVo2.toFixed(1) : '0'}</span>
+            <span className="text-xs font-normal ml-3">ml/kg/min</span>
+          </div>{' '}
+          {/* <p className={`text-sm font-semibold mb-4 text-white`}>{vo2Category.label}</p> */}
+          <p className="mt-3 pt-3 text-xs leading-tight border-t border-t-[2px] border-white/10 text-white/50">Elite cardiovascular fitness level</p>
         </CardContent>
       </Card>
 

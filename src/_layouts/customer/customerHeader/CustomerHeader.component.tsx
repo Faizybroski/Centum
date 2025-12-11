@@ -39,9 +39,9 @@ export default function CustomerHeader() {
   ]
 
   return (
-    <header className="bg-white border-b border-px border-border sticky top-0 z-40">
-      <Container>
-        <div className="flex justify-between items-center mx-auto h-20">
+    <div className="sticky top-0 z-50 bg-black bg-white border-b border-border">
+      {/* <Container> */}
+        <div className="flex justify-between items-center  h-20">
           {/* Left side - Logo and Sidebar Toggle */}
           <div className="flex flex-col px-3 py-1 h-20 justify-center">
             <h2 className="text-lg font-bold">Welcome Back, {user ? user.userProfile.full_name : 'U'}</h2>
@@ -156,7 +156,7 @@ export default function CustomerHeader() {
             </DropdownMenu>
           </div>
         </div>
-      </Container>
-    </header>
+      {/* </Container> */}
+    </div>
   )
 }

@@ -5,11 +5,11 @@ import { Card, CardContent } from '@/components/ui/card'
 
 export default function DashboardSkeleton() {
   return (
-    <div className="p-6 space-y-6 animate-pulse">
+    <div className="px-14 py-6 space-y-6 animate-pulse ">
       {/* header */}
-      <div className="w-full">
+      {/* <div className="w-full">
         <Skeleton className="w-full h-18 bg-gray-200" />
-      </div>
+      </div> */}
 
       {/* Top Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -18,8 +18,8 @@ export default function DashboardSkeleton() {
           <CardContent className="space-y-4">
             <div className="flex justify-between">
               <Skeleton className="w-32 h-4 bg-gray-300" />
-              <Skeleton className="w-10 h-4 bg-gray-300" />
             </div>
+              <Skeleton className="w-10 h-4 bg-gray-300" />
             <div className="space-y-3">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="space-y-1">
@@ -38,19 +38,19 @@ export default function DashboardSkeleton() {
         {/* Middle Boxes: Biological Age + VO2 MAX */}
         <div className="space-y-8">
           {/* Bio Age */}
-          <Card className="p-6 bg-green-600/30">
+          <Card className="p-6 bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]">
             <CardContent className="space-y-2 text-center">
-              <Skeleton className="w-24 h-4 mx-auto" />
-              <Skeleton className="w-16 h-6 mx-auto" />
-              <Skeleton className="w-40 h-4 mx-auto" />
+              <Skeleton className="w-24 h-4 mx-3 bg-gray-300" />
+              <Skeleton className="w-16 h-6 mx-3 bg-gray-300" />
+              <Skeleton className="w-40 h-4 mx-3 bg-gray-300" />
             </CardContent>
           </Card>
           {/* VO2 Max */}
-          <Card className="p-6 bg-blue-600/30">
+          <Card className="p-6 bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]">
             <CardContent className="space-y-2 text-center">
-              <Skeleton className="w-24 h-4 mx-auto" />
-              <Skeleton className="w-16 h-6 mx-auto" />
-              <Skeleton className="w-40 h-4 mx-auto" />
+              <Skeleton className="w-24 h-4 mx-3 bg-gray-300" />
+              <Skeleton className="w-16 h-6 mx-3 bg-gray-300" />
+              <Skeleton className="w-40 h-4 mx-3 bg-gray-300" />
               <div className="flex justify-center pt-2">
                 <Skeleton className="w-20 h-8 rounded-md" />
               </div>
