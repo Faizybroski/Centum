@@ -3,10 +3,7 @@ import React from 'react'
 import AuthGraud from '@/components/authGraud/AuthGraud.component'
 import CustomerHeader from '../../_layouts/customer/customerHeader/CustomerHeader.component'
 import AssessmentGuard from '@/components/assessmentGraud/AssessmentGuard.component'
-import CustomerSidebar from '@/components/customer-sideBar/SideBar.component'
 import { generateMeta } from '@/lib/seo'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { Container } from '@/components/ui/container'
 
 export const generateMetadata = async () =>
   await generateMeta({
@@ -19,14 +16,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <AuthGraud pageType="customer">
       <AssessmentGuard>
-        <SidebarProvider>
+
+        <CustomerHeader children={children} />
+
+        {/* <SidebarProvider>
           <div className="flex h-screen overflow-hidden">
-            {/* Sidebar */}
+
             <aside className="w-64 border-r border-gray-200 bg-white hidden lg:flex flex-col shrink-0 h-full overflow-y-auto">
               <CustomerSidebar />
             </aside>
 
-            {/* RIGHT SIDE */}
             <div className="flex flex-col flex-1 min-w-0 h-full">
               <header className="">
                 <CustomerHeader />
@@ -34,15 +33,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
               <main className="flex-1 overflow-y-auto bg-gray-50">
                 <div className="p-4 sm:p-6 lg:p-8">
-                  {/* <Container> */}
                   {children}
-
-                  {/* </Container> */}
                 </div>
               </main>
             </div>
           </div>
-        </SidebarProvider>
+        </SidebarProvider> */}
       </AssessmentGuard>
     </AuthGraud>
   )

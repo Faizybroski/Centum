@@ -1,6 +1,8 @@
 'use client'
 
 import React from 'react'
+import { usePathname } from 'next/navigation'
+import { paths } from '@/navigate/paths'
 import { Card, CardContent } from '@/components/ui/card'
 import { Calendar, Clock } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -14,14 +16,23 @@ export default function ComingSoon({
   subtitle?: string
   features?: boolean
 }) {
+  const pathname = usePathname()
   return (
     <motion.div className="text-center" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
       <Card className="border-0 shadow-[#0B342D]/20 shadow-lg bg-white mx-auto">
         <CardContent className="p-6 sm:p-8 lg:p-12">
           <div className="mb-6 sm:mb-8">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Calendar className="h-10 w-10 sm:h-12 sm:w-12 text-[#0B342D]" />
-            </div>
+            {pathname === paths.customerBlog() && (
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Calendar className="h-10 w-10 sm:h-12 sm:w-12 text-[#0B342D]" />
+              </div>
+            )}
+            {pathname != paths.customerBlog() && (
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Calendar className="h-10 w-10 sm:h-12 sm:w-12 text-[#0B342D]" />
+              </div>
+            )}
+
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">{title}</h2>
             <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">{subtitle}</p>
           </div>
