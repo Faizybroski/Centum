@@ -5,12 +5,14 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { BarChart3, Calendar } from 'lucide-react'
+import { Eye, Download } from 'lucide-react'
 
 import NoRecordsFound from '@/components/noRecordsFound/NoRecordFound.component'
 import HowToCompareReports from '../howToCompareReports/HowToCompareReports.component'
 import CompareReportDialog from '../compareReportDialog/CompareReportDialog.component'
 import { paths } from '@/navigate/paths'
 import { Button } from '@/components/ui/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCompareReportsMutation, useGetReportsQuery } from '@/redux/services/health-report.api'
 import { FileTypeStatusBadge } from '@/components/statusBadge/FileTypeStatusBadge.component'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -62,35 +64,33 @@ export default function ReportHistoryLayout() {
   }, [selectedReports])
 
   return (
-    <div>
-      <div className="p-4 md:p-8">
-        <div className="flex justify-between items-center mb-8">
-          <motion.div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 bg-white p-4 rounded-xl w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
-            <div className="flex items-center gap-2">
-              <Image src="/assets/icons/report-history.gif" alt="Health Report" width={100} height={100} unoptimized />
-              <div className="flex flex-col gap-2">
-                <h1 className="text-2xl font-bold text-gray-900">Health History</h1>
-                <div className="text-gray-600">View and manage your combined health analysis reports</div>
-              </div>
+    <div className="w-full p-3 md:py-4 md:px-0">
+      <div className="md:py-0">
+        <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2">
+            {/* <Image src="/assets/icons/report-history.gif" alt="Health Report" width={100} height={100} unoptimized /> */}
+            <div className="flex flex-col gap-2">
+              <h1 className="text-2xl font-bold text-gray-900">Report History</h1>
+              <p className="text-gray-600">Access and manage all your uploaded health reports.</p>
             </div>
+          </div>
 
-            <div className="flex items-center gap-3">
-              {selectedReports.length > 0 && (
-                <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                  {selectedReports.length === 2 && (
-                    <Button onClick={handleCompareReports} disabled={isLoadingSummary} className="flex items-center gap-2 w-full sm:w-auto">
-                      <BarChart3 className="h-4 w-4" />
-                      Compare Reports
-                    </Button>
-                  )}
-                  <Button variant="outline" onClick={() => setSelectedReports([])} className="text-sm w-full sm:w-auto">
-                    Clear Selection
+          <div className="flex items-center gap-3">
+            {selectedReports.length > 0 && (
+              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                {selectedReports.length === 2 && (
+                  <Button onClick={handleCompareReports} disabled={isLoadingSummary} className="flex items-center gap-2 w-full sm:w-auto">
+                    <BarChart3 className="h-4 w-4" />
+                    Compare Reports
                   </Button>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </div>
+                )}
+                <Button variant="outline" onClick={() => setSelectedReports([])} className="text-sm w-full sm:w-auto">
+                  Clear Selection
+                </Button>
+              </div>
+            )}
+          </div>
+        </motion.div>
 
         {isFetching && (
           <div className="grid lg:grid-cols-2 gap-6">
@@ -104,10 +104,56 @@ export default function ReportHistoryLayout() {
 
         {isSuccess && data?.reports?.length === 0 && <NoRecordsFound title="No Reports Found" description="You don't have any health reports yet." />}
 
+        {isSuccess && data?.reports?.length > 0 && (
+          <div className="hidden md:block overflow-x-auto">
+            <Table className="border rounded-lg">
+              <TableHeader>
+                <TableRow className="bg-gray-100">
+                  <TableHead className="font-semibold text-gray-700">Report Name</TableHead>
+                  <TableHead className="font-semibold text-gray-700">Category</TableHead>
+                  <TableHead className="font-semibold text-gray-700">Date</TableHead>
+                  <TableHead className="font-semibold text-gray-700">Status</TableHead>
+                  <TableHead className="text-center font-semibold text-gray-700">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {data.reports.map((report: any) => (
+                  <TableRow key={report.id} className="odd:bg-gray-50 hover:bg-gray-50 transition">
+                    {/* Report Name */}
+                    <TableCell className="font-medium">{truncateString(report.report_title, 60) || 'N/A'}</TableCell>
+
+                    {/* Category */}
+                    <TableCell className="text-gray-600 capitalize">{report.category || 'N/A'}</TableCell>
+
+                    {/* Date */}
+                    <TableCell className="text-gray-600">{moment(report.processed_at).format('MMM DD, YYYY')}</TableCell>
+
+                    {/* Status */}
+                    <TableCell>
+                      <FileTypeStatusBadge status={report.status} />
+                    </TableCell>
+
+                    {/* Action */}
+                    <TableCell className="text-center">
+                      <Button size="icon" variant="ghost" onClick={() => navigate(paths.customerReportDetail(report.id))} disabled={isPending}>
+                        <Eye className="w-4 h-4 text-black" />
+                      </Button>
+                      <Button size="icon" variant="ghost">
+                        <Download className="w-4 h-4 text-black" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
         {isSuccess && !isFetching && data?.reports?.length > 0 && (
           <>
             {/* Health Reports Grid */}
-            <div className="grid lg:grid-cols-2 gap-6 mb-12">
+            <div className="grid lg:grid-cols-2 gap-6 mb-12 md:hidden">
               {data?.reports?.map((report: any) => {
                 const isSelected = selectedReports.includes(report.id)
                 const canSelect = selectedReports.length < 2 || isSelected
@@ -187,7 +233,7 @@ export default function ReportHistoryLayout() {
             </div>
 
             {/* How to Compare Reports Section */}
-            <HowToCompareReports />
+            {/* <HowToCompareReports /> */}
           </>
         )}
       </div>
