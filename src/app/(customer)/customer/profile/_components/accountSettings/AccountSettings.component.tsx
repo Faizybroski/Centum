@@ -21,7 +21,7 @@ export default function AccountSettings() {
             <h3 className="text-[#0B342D] text-base">Change Password</h3>
             <p className="text-[#0B342D] text-sm">Update your account password</p>
           </div>
-          <Button variant="outline" size="sm" className="w-fit border-[#E0E6EB] text-[#0B342D] hover:bg-[#0B342D] hover:border-[#0B342D] hover:text-white">
+          <Button variant="outline" className="bg-gray-50 border-gray-150 text-gray-900">
             Update
           </Button>
         </Card>
@@ -33,7 +33,7 @@ export default function AccountSettings() {
             <h3 className="text-[#0B342D] text-base">Notification Settings</h3>
             <p className="text-[#0B342D] text-sm">Manage email and push notifications</p>
           </div>
-          <Button variant="outline" size="sm" className="w-fit border-[#E0E6EB] text-[#0B342D] hover:bg-[#0B342D] hover:border-[#0B342D] hover:text-white">
+          <Button variant="outline" className="bg-gray-50 border-gray-150 text-gray-900">
             Manage
           </Button>
         </Card>
@@ -46,7 +46,7 @@ export default function AccountSettings() {
             <h3 className="text-[#0B342D] text-base">Delete Account</h3>
             <p className="text-[#0B342D] text-sm">Delete your account permanently</p>
           </div>
-          <Button variant="destructive" size="sm" className="w-fit text-white">
+          <Button variant="destructive" className="text-white">
             Delete
           </Button>
         </Card>
