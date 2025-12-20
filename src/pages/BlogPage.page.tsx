@@ -4,6 +4,7 @@ import React from 'react'
 import { usePathname } from 'next/navigation'
 import { paths } from '@/navigate/paths'
 import ComingSoon from '@/components/coming-soon/ComingSoon.component'
+import { motion } from 'framer-motion'
 
 export default function BlogPage() {
   const pathname = usePathname()
@@ -18,10 +19,10 @@ export default function BlogPage() {
         </div>
       )}
       {pathname === paths.customerBlog() && (
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">Health Insights Blog</h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600">Expert insights, research updates, and practical tips for optimizing your health journey.</p>
-        </div>
+        <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="mb-6 sm:mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">Health Insights Blog</h1>
+          <p className="text-gray-600">Expert insights, research updates, and practical tips for optimizing your health journey.</p>
+        </motion.div>
       )}
       {pathname === paths.customerBlog() && (
         <div className="max-w-5xl mx-auto">
