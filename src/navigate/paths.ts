@@ -36,4 +36,5 @@ export const paths = {
   adminUsers: () => `${paths.admin}/users`,
   adminUserDetail: (id: string) => `${paths.admin}/user-detail/${id}`,
   adminFailedReports: () => `${paths.admin}/failed-reports`,
+  adminFAQs: () => `${paths.admin}/faq`,
 }

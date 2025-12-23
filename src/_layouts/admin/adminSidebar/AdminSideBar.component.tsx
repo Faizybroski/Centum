@@ -22,7 +22,7 @@ export function AdminSidebar() {
         <SidebarHeader className="border-b">
           {/* Logo */}
           <Link href={paths.adminDashboard()} className="cursor-pointer items-center h-16 flex justify-center">
-            <Image src="/assets/icons/centum_logo_black.svg" alt="Centum Health" className="h-full w-auto object-contain" height={1000} width={1000} priority />
+            <Image src="/assets/icons/centum_health-logo.svg" alt="Centum Health" className="h-full w-auto object-contain" height={1000} width={1000} priority />
           </Link>
         </SidebarHeader>
 

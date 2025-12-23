@@ -13,6 +13,7 @@ export default function useAdminSidebar() {
     { label: 'Dashboard', path: paths.adminDashboard(), icon: 'layout-dashboard' },
     { label: 'Users', path: paths.adminUsers(), icon: 'users' },
     { label: 'Failed Reports', path: paths.adminFailedReports(), icon: 'file-text' },
+    { label: 'FAQs', path: paths.adminFAQs(), icon: 'help-circle' },
   ]
 
   useEffect(() => {

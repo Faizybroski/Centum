@@ -59,7 +59,14 @@ export const extendedApi = api.injectEndpoints({
         body: { new_password: password, token },
       }),
     }),
+
+    deleteAccount: builder.mutation<void, void>({
+      query: () => ({
+        url: '/v1/user/delete',
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
-export const { useLoginMutation, useProfileQuery, useLazyProfileQuery, useSignupMutation, useLazyVerifyEmailQuery, useUpdateProfileMutation, useForgotPasswordMutation, useResetPasswordMutation } = extendedApi
+export const { useLoginMutation, useProfileQuery, useLazyProfileQuery, useSignupMutation, useLazyVerifyEmailQuery, useUpdateProfileMutation, useForgotPasswordMutation, useResetPasswordMutation, useDeleteAccountMutation } = extendedApi

@@ -3,7 +3,30 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Bell, Lock, Trash2 } from 'lucide-react'
 
+import { useDeleteAccountMutation } from '@/redux/services/auth.api'
+import { useRouter } from 'next/navigation'
+import { handleLogout } from '@/utils'
+
 export default function AccountSettings() {
+  const [deleteAccount, { isLoading }] = useDeleteAccountMutation()
+  const router = useRouter()
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('This action is permanent. Your account will be deleted forever. Continue?')
+
+    if (!confirmed) return
+
+    try {
+      await deleteAccount().unwrap()
+
+      // Optional: clear tokens manually if you store them
+      await handleLogout()
+
+      router.replace('/login')
+    } catch (error) {
+      console.error('Delete account failed:', error)
+    }
+  }
 
   return (
     <Card className="mb-6 sm:mb-8 py-[33px] pl-[33px] pr-[26px]">
@@ -46,7 +69,7 @@ export default function AccountSettings() {
             <h3 className="text-[#0B342D] text-base">Delete Account</h3>
             <p className="text-[#0B342D] text-sm">Delete your account permanently</p>
           </div>
-          <Button variant="destructive" className="text-white">
+          <Button variant="destructive" className="text-white" onClick={handleDelete} disabled={isLoading}>
             Delete
           </Button>
         </Card>
