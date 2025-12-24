@@ -1,30 +1,49 @@
+'use client'
+
+import React, { useEffect } from 'react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { FAQ } from '@/types/FAQs.type'
 import { useForm } from 'react-hook-form'
 import { faqSchema, TSchema } from './FAQForm.schema'
+import { FAQ_CATEGORIES, isFAQCategory } from '@/constants/faqCategories'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 interface Props {
   open: boolean
-  onAdd: (faq: FAQ) => void
+  initialData?: FAQ | null
+  onSubmit: (data: TSchema) => void | Promise<void>
   onClose: () => void
 }
 
-export default function AddFAQForm({ open, onAdd, onClose }: Props) {
+export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Props) {
   const faqForm = useForm<TSchema>({
     resolver: zodResolver(faqSchema),
     defaultValues: {
+      category: undefined,
       question: '',
       answer: '',
     },
   })
 
-  const onSubmit = async (data: TSchema) => {
-    onAdd(data)
+  useEffect(() => {
+    if (initialData) {
+      faqForm.reset({
+        category: isFAQCategory(initialData.category) ? initialData.category : undefined,
+        question: initialData.question,
+        answer: initialData.answer,
+      })
+    } else {
+      faqForm.reset()
+    }
+  }, [initialData, faqForm])
+
+  const handleSubmit = async (data: TSchema) => {
+    await onSubmit(data)
     faqForm.reset()
     onClose()
   }
@@ -33,10 +52,35 @@ export default function AddFAQForm({ open, onAdd, onClose }: Props) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add FAQ</DialogTitle>
+          <DialogTitle>{initialData ? 'Edit FAQ' : 'Add FAQ'}</DialogTitle>
         </DialogHeader>
         <Form {...faqForm}>
-          <form onSubmit={faqForm.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={faqForm.handleSubmit(handleSubmit)} className="space-y-4">
+            {/* Category */}
+            <FormField
+              control={faqForm.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FAQ_CATEGORIES.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Title */}
             <FormField
               control={faqForm.control}
@@ -72,7 +116,7 @@ export default function AddFAQForm({ open, onAdd, onClose }: Props) {
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit">Add</Button>
+              <Button type="submit">{initialData ? 'Update FAQ' : 'Add FAQ'}</Button>
             </div>
           </form>
         </Form>

@@ -1,14 +1,110 @@
-import { FAQ } from "@/types/FAQs.type";
+import { paths } from '@/navigate/paths'
+import { FAQ } from '@/types/FAQs.type'
 
-const faqs: FAQ[] = [
+export const initialFAQs: FAQ[] = [
   {
-    question: "What is Next.js?",
-    answer: "Next.js is a React framework for production.",
+    _id: '1',
+    category: 'privacy',
+    question: 'Is my health information secure?',
+    answer: 'Yes! We take your privacy and security very seriously. We use industry-standard security measures, including encryption, access controls, and regular security audits, to protect your information.',
+    created_at: new Date().toISOString(),
   },
   {
-    question: "What is Tailwind CSS?",
-    answer: "A utility-first CSS framework for fast UI development.",
+    _id: '2',
+    category: 'privacy',
+    question: 'What information does Centum Health collect?',
+    answer: 'We collect personal details (name, contact info), health data (medical history, lifestyle habits, biomarker and lab results), account credentials, and usage information such as device and session data.',
+    created_at: new Date().toISOString(),
   },
-];
-
-export default faqs;
+  {
+    _id: '3',
+    category: 'privacy',
+    question: 'How is my information used?',
+    answer: 'Your information is used to deliver personalized health insights, manage your account, enable practitioner support, improve the Centum Health Tracker, and comply with legal and regulatory requirements.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '4',
+    category: 'privacy',
+    question: 'Who has access to my data?',
+    answer: 'Only authorized Centum staff, accredited laboratories, and your chosen healthcare practitioners may access data. Access is controlled through role-based permissions.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '5',
+    category: 'privacy',
+    question: 'Do you share my personal information with third parties?',
+    answer: 'We only share data with trusted service providers, laboratories, and practitioners who are under contractual obligations to protect confidentiality. We do not sell your personal data.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '6',
+    category: 'privacy',
+    question: 'Where is my data stored?',
+    answer: 'Data is securely stored in Australian data centers or compliant cloud platforms, protected by AES-256 encryption at rest and TLS 1.3 in transit.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '7',
+    category: 'privacy',
+    question: 'How long do you keep my information?',
+    answer: 'We retain your data for as long as your Centum Health account is active, or as long as needed to deliver services. We may also retain it to comply with laws, resolve disputes, or enforce agreements.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '8',
+    category: 'privacy',
+    question: 'What security measures does Centum Health use?',
+    answer: 'We implement encryption at rest and in transit, role-based access controls, continuous monitoring, penetration testing, and periodic security audits.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '9',
+    category: 'privacy',
+    question: 'What happens if there is a data breach?',
+    answer: 'If a breach occurs that risks your rights and freedoms, you will be notified promptly as required by law, and corrective measures will be taken immediately.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '10',
+    category: 'privacy',
+    question: 'What rights do I have over my data?',
+    answer: 'You have the right to access, correct, or delete your data, object to certain processing, and withdraw consent at any time. Requests can be made via our privacy contact details below.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '11',
+    category: 'privacy',
+    question: 'Do you use cookies?',
+    answer: 'Yes, we use cookies and similar technologies for improving your platform experience and analyzing usage. You can manage cookies in your browser settings.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '12',
+    category: 'privacy',
+    question: 'Is the platform suitable for children?',
+    answer: 'No. Centum Health Tracker is not designed for individuals under 18. We do not knowingly collect information from children.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '13',
+    category: 'privacy',
+    question: 'How often is this FAQ reviewed?',
+    answer: 'We periodically review and update this FAQ to reflect changes in regulation, security standards, and our practices.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '14',
+    category: 'privacy',
+    question: 'How can I learn more about your privacy practices?',
+    answer: 'Please review our full Privacy Policy.',
+    created_at: new Date().toISOString(),
+  },
+  {
+    _id: '15',
+    category: 'privacy',
+    question: 'How can I contact Centum Health about privacy or security?',
+    answer: 'You may contact our Privacy Office at info@centum.health or reach us via our support channels for assistance.',
+    created_at: new Date().toISOString(),
+  },
+]

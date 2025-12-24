@@ -72,9 +72,9 @@ export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPa
             {page}-{data.length} of {totalPages}
           </div>
           <div className="flex items-center gap-1 md:gap-4">
-            <button className="cursor-pointer p-1 rounded bg-primary/10 text-primary hover:bg-primary/20" onClick={() => setPage && setPage(page! - 1)} disabled={page === 1}>
+            <Button className="cursor-pointer p-1 rounded bg-primary/10 text-primary hover:bg-primary/20" onClick={() => setPage && setPage(page! - 1)} disabled={page === 1}>
               <ChevronLeft />
-            </button>
+            </Button>
 
             {(() => {
               const pages: (number | string)[] = []
@@ -111,9 +111,9 @@ export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPa
               )
             })()}
 
-            <button className="cursor-pointer p-1 rounded bg-primary/10 text-primary hover:bg-primary/20" onClick={() => setPage && setPage(page! + 1)} disabled={page === totalPages}>
+            <Button className="cursor-pointer p-1 rounded bg-primary/10 text-primary hover:bg-primary/20" onClick={() => setPage && setPage(page! + 1)} disabled={page === totalPages}>
               <ChevronRight />
-            </button>
+            </Button>
           </div>
         </div>
       )}
