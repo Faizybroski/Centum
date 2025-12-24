@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useMemo, useState } from 'react'
+import FAQSkeleton from '@/components/skeletons/faq/FAQSkeleton.component'
+import FAQEmptyState from '@/components/noFAQFound/NoFAQFound.component'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { initialFAQs } from '@/dto/FAQ.dto'
@@ -20,11 +22,6 @@ export default function FAQPage() {
     faqs.forEach((f) => set.add(f.category))
     return Array.from(set)
   }, [faqs])
-
-  const filteredFAQs = useMemo(() => {
-    if (selectedCategory === 'all') return initialFAQs
-    return initialFAQs.filter((faq) => faq.category === selectedCategory)
-  }, [selectedCategory])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8">
@@ -50,8 +47,10 @@ export default function FAQPage() {
 
         {/* Collapsible FAQs */}
         <div className="space-y-4">
-          {filteredFAQs.length === 0 && <p className="text-center text-gray-500">No FAQs found for this category.</p>}
-          {filteredFAQs.map((faq, index) => {
+          {isLoading && <FAQSkeleton />}
+
+          {!isLoading && faqs.length === 0 && <FAQEmptyState />}
+          {faqs.map((faq, index) => {
             const id = index + 1
             return (
               // <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="bg-white rounded-lg shadow-sm border">
