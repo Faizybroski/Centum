@@ -11,9 +11,8 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { initialFAQs } from '@/dto/FAQ.dto'
-import { useGetAllFaqsQuery } from '@/redux/services/faq.api'
 import { TSchema } from '../_components/FAQForm/FAQForm.schema'
-import { useCreateFaqMutation, useUpdateFaqMutation, useDeleteFaqMutation } from '@/redux/services/admin/faq.api'
+import { useGetFaqsQuery, useCreateFaqMutation, useUpdateFaqMutation, useDeleteFaqMutation } from '@/redux/services/admin/faq.api'
 import { FAQ } from '@/types/FAQs.type'
 
 export default function Layout() {
@@ -24,7 +23,7 @@ export default function Layout() {
   const [editingFaq, setEditingFaq] = useState<FAQ | null>(null)
   const [faqToDelete, setFaqToDelete] = useState<FAQ | null>(null)
 
-  const { data, isLoading } = useGetAllFaqsQuery(selectedCategory ? { category: selectedCategory } : undefined)
+  const { data, isLoading } = useGetFaqsQuery(selectedCategory ? { category: selectedCategory } : undefined)
 
   const [createFaq] = useCreateFaqMutation()
   const [updateFaq] = useUpdateFaqMutation()
@@ -43,7 +42,7 @@ export default function Layout() {
       await updateFaq({ id: editingFaq._id, ...data })
       setEditingFaq(null)
     } else {
-      await createFaq(data)
+      await createFaq({ ...data, status: 'saved' })
     }
     setDialogOpen(false)
   }

@@ -9,11 +9,10 @@ export interface FAQResponse {
 
 export const faqApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // getAllFaqs: builder.query<FAQResponse, { category?: string } | void>({
-    //   query: (params) =>
-    //     params?.category ? `faqs?category=${params.category}` : 'faqs',
-    //   providesTags: ['FAQ'],
-    // }),
+    getFaqs: builder.query<FAQResponse, { category?: string } | void>({
+      query: (params) => (params?.category ? `admin/faqs?category=${params.category}` : 'admin/faqs'),
+      providesTags: ['FAQ'],
+    }),
 
     createFaq: builder.mutation<any, TSchema>({
       query: (body) => ({
@@ -32,6 +31,15 @@ export const faqApi = api.injectEndpoints({
       }),
       invalidatesTags: ['FAQ'],
     }),
+
+    autosaveFaq: builder.mutation<any, { id?: string } & TSchema>({
+      query: ({ id, ...body }) => ({
+        url: id ? `admin/faq/${id}` : 'admin/faq',
+        method: id ? 'PUT' : 'POST',
+        body: { ...body, status: 'draft' },
+      }),
+    }),
+
     deleteFaq: builder.mutation<{ message: string }, string>({
       query: (id) => ({
         url: `admin/faq/${id}`,
@@ -42,4 +50,4 @@ export const faqApi = api.injectEndpoints({
   }),
 })
 
-export const { useCreateFaqMutation, useUpdateFaqMutation, useDeleteFaqMutation } = faqApi
+export const { useGetFaqsQuery, useCreateFaqMutation, useUpdateFaqMutation, useAutosaveFaqMutation, useDeleteFaqMutation } = faqApi

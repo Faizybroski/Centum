@@ -7,6 +7,7 @@ export const faqSchema = z.object({
   }),
   question: z.string().min(5, 'Question is too short'),
   answer: z.string().min(10, 'Answer is too short'),
+  status: z.enum(['draft', 'saved']).optional(),
 })
 
 export type TSchema = z.infer<typeof faqSchema>

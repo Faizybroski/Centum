@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
+import { useDebounce } from '@/hooks/useDebounce'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -10,6 +11,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { FAQ } from '@/types/FAQs.type'
 import { useForm } from 'react-hook-form'
 import { faqSchema, TSchema } from './FAQForm.schema'
+import { useAutosaveFaqMutation } from '@/redux/services/admin/faq.api'
 import { FAQ_CATEGORIES, isFAQCategory } from '@/constants/faqCategories'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -21,6 +23,8 @@ interface Props {
 }
 
 export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Props) {
+  const [draftId, setDraftId] = React.useState<string | null>(null)
+
   const faqForm = useForm<TSchema>({
     resolver: zodResolver(faqSchema),
     defaultValues: {
@@ -29,6 +33,46 @@ export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Pro
       answer: '',
     },
   })
+
+  const watchedValues = faqForm.watch()
+  const debouncedValues = useDebounce(watchedValues, 800)
+
+  const [autosaveFaq] = useAutosaveFaqMutation()
+
+  useEffect(() => {
+    if (!open) return
+    if (!debouncedValues.question && !debouncedValues.answer) return
+
+    // If editing an existing FAQ, autosave against it
+    if (initialData?._id) {
+      autosaveFaq({
+        id: initialData._id,
+        ...debouncedValues,
+        status: 'draft',
+      })
+      return
+    }
+
+    // Create draft ONCE
+    if (!draftId) {
+      autosaveFaq({
+        ...debouncedValues,
+        status: 'draft',
+      }).then((res: any) => {
+        if (res?.data?._id) {
+          setDraftId(res.data._id)
+        }
+      })
+      return
+    }
+
+    // Update existing draft
+    autosaveFaq({
+      id: draftId,
+      ...debouncedValues,
+      status: 'draft',
+    })
+  }, [debouncedValues, open])
 
   useEffect(() => {
     if (initialData) {
@@ -42,8 +86,20 @@ export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Pro
     }
   }, [initialData, faqForm])
 
+  useEffect(() => {
+    if (!open) {
+      setDraftId(null)
+      faqForm.reset()
+    }
+  }, [open])
+
   const handleSubmit = async (data: TSchema) => {
-    await onSubmit(data)
+    const id = initialData?._id || draftId
+
+    if (!id) return
+
+    await onSubmit({ ...data, status: 'saved' })
+    setDraftId(null)
     faqForm.reset()
     onClose()
   }

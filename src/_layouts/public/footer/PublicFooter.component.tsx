@@ -82,7 +82,8 @@ export default function PublicFooter() {
             </li>
             <li>
               <Link href={paths.securityFaq()} className="hover:text-white">
-                Security & Privacy FAQ
+                {/* Security & Privacy  */}
+                FAQ
               </Link>
             </li>
           </ul>

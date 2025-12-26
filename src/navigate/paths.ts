@@ -28,7 +28,8 @@ export const paths = {
   customerBlog: () => `${paths.customer}/blogs`,
   //Extra resources
   privacy: () => `/privacy-policy`,
-  securityFaq: () => `/security-faq`,
+  // securityFaq: () => `/security-faq`,
+  securityFaq: () => `/faq`,
   userGuide: () => `/user-guide`,
   // Project paths admin
   adminDashboard: () => `${paths.admin}/dashboard`,
