@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { useDebounce } from '@/hooks/useDebounce'
+// import { useDebounce } from '@/hooks/useDebounce'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -11,7 +11,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { FAQ } from '@/types/FAQs.type'
 import { useForm } from 'react-hook-form'
 import { faqSchema, TSchema } from './FAQForm.schema'
-import { useAutosaveFaqMutation } from '@/redux/services/admin/faq.api'
+// import { useAutosaveFaqMutation } from '@/redux/services/admin/faq.api'
 import { FAQ_CATEGORIES, isFAQCategory } from '@/constants/faqCategories'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Props) {
-  const [draftId, setDraftId] = React.useState<string | null>(null)
+  // const [draftId, setDraftId] = React.useState<string | null>(null)
 
   const faqForm = useForm<TSchema>({
     resolver: zodResolver(faqSchema),
@@ -34,45 +34,45 @@ export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Pro
     },
   })
 
-  const watchedValues = faqForm.watch()
-  const debouncedValues = useDebounce(watchedValues, 800)
+  // const watchedValues = faqForm.watch()
+  // const debouncedValues = useDebounce(watchedValues, 800)
 
-  const [autosaveFaq] = useAutosaveFaqMutation()
+  // const [autosaveFaq] = useAutosaveFaqMutation()
 
-  useEffect(() => {
-    if (!open) return
-    if (!debouncedValues.question && !debouncedValues.answer) return
+  // useEffect(() => {
+  //   if (!open) return
+  //   if (!debouncedValues.question && !debouncedValues.answer) return
 
-    // If editing an existing FAQ, autosave against it
-    if (initialData?._id) {
-      autosaveFaq({
-        id: initialData._id,
-        ...debouncedValues,
-        status: 'draft',
-      })
-      return
-    }
+  //   // If editing an existing FAQ, autosave against it
+  //   if (initialData?._id) {
+  //     autosaveFaq({
+  //       id: initialData._id,
+  //       ...debouncedValues,
+  //       status: 'draft',
+  //     })
+  //     return
+  //   }
 
-    // Create draft ONCE
-    if (!draftId) {
-      autosaveFaq({
-        ...debouncedValues,
-        status: 'draft',
-      }).then((res: any) => {
-        if (res?.data?._id) {
-          setDraftId(res.data._id)
-        }
-      })
-      return
-    }
+  //   // Create draft ONCE
+  //   if (!draftId) {
+  //     autosaveFaq({
+  //       ...debouncedValues,
+  //       status: 'draft',
+  //     }).then((res: any) => {
+  //       if (res?.data?._id) {
+  //         setDraftId(res.data._id)
+  //       }
+  //     })
+  //     return
+  //   }
 
-    // Update existing draft
-    autosaveFaq({
-      id: draftId,
-      ...debouncedValues,
-      status: 'draft',
-    })
-  }, [debouncedValues, open])
+  //   // Update existing draft
+  //   autosaveFaq({
+  //     id: draftId,
+  //     ...debouncedValues,
+  //     status: 'draft',
+  //   })
+  // }, [debouncedValues, open])
 
   useEffect(() => {
     if (initialData) {
@@ -82,26 +82,39 @@ export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Pro
         answer: initialData.answer,
       })
     } else {
-      faqForm.reset()
+      faqForm.reset({
+        category: undefined,
+        question: '',
+        answer: '',
+      })
     }
   }, [initialData, faqForm])
 
-  useEffect(() => {
-    if (!open) {
-      setDraftId(null)
-      faqForm.reset()
-    }
-  }, [open])
+  // useEffect(() => {
+  //   if (!open) {
+  //     // setDraftId(null)
+  //     faqForm.reset()
+  //   }
+  // }, [open])
 
   const handleSubmit = async (data: TSchema) => {
-    const id = initialData?._id || draftId
+    // const id = initialData?._id || draftId
 
-    if (!id) return
+    if (!initialData) {
+      await onSubmit({ ...data, status: 'saved' })
+      // setDraftId(null)
+      faqForm.reset()
+      onClose()
+    } else {
+      const id = initialData?._id
 
-    await onSubmit({ ...data, status: 'saved' })
-    setDraftId(null)
-    faqForm.reset()
-    onClose()
+      if (!id) return
+
+      await onSubmit({ ...data, status: 'saved' })
+      // setDraftId(null)
+      faqForm.reset()
+      onClose()
+    }
   }
 
   return (

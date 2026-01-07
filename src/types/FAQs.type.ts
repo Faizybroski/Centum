@@ -3,5 +3,6 @@ export interface FAQ {
   category: string;
   question: string;
   answer: string;
+  status: 'saved' | 'draft';
   created_at: string;
 }

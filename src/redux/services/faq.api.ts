@@ -6,21 +6,15 @@ export interface FAQResponse {
   data: FAQ[]
 }
 
-export const faqApi = api.injectEndpoints({
+export const publicFaqApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // ✅ Public / User / Admin
-    getAllFaqs: builder.query<FAQResponse, { category?: string } | void>({
-      query: (params) => {
-        const query = params?.category ? `faqs?category=${params.category}` : 'faqs'
-
-        return {
-          url: query,
-          method: 'GET',
-        }
-      },
+    getAllFaqs: builder.query<any, void>({
+      query: () => ({ url: `/v1/faq`, method: 'GET' }),
+      transformResponse: (response: any) => response,
       providesTags: ['FAQ'],
     }),
   }),
 })
 
-export const { useGetAllFaqsQuery, useLazyGetAllFaqsQuery } = faqApi
+export const { useGetAllFaqsQuery, useLazyGetAllFaqsQuery } = publicFaqApi

@@ -146,7 +146,7 @@ export default function HowDoesItWorkSection() {
               </React.Fragment>
             ))}
           </div>
-          <p className="text-sm text-gray-500 mt-3">Start to finish in as little as 2 weeks</p>
+          {/* <p className="text-sm text-gray-500 mt-3">Start to finish in as little as 2 weeks</p> */}
         </div>
       </div>
     </section>

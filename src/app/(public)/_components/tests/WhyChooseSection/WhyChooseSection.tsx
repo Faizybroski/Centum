@@ -55,7 +55,7 @@ export default function WhyChooseSection() {
                 <div className="rounded-xl p-8 shadow-sm text-white bg-gradient-to-r from-[#16AF9D] to-[#0B3029]">
                     <h2 className="text-xl font-semibold mb-3">Need Help Choosing?</h2>
                     <p className="text-md text-white/80 mb-8">
-                        Our healthcare specialists can recommend the right tests based on your health goals and medical history.
+                        Our specialists can provide insight to help choose the most suitable plan based on your health goals & medical history, not ‘right tests’
                     </p>
 
                     <Button className="w-full bg-white text-gray-900 font-medium py-2 rounded-xl hover:bg-gray-100 transition">

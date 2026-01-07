@@ -1,7 +1,7 @@
 import { paths } from '@/navigate/paths'
-import { FAQ } from '@/types/FAQs.type'
+// import { FAQ } from '@/types/FAQs.type'
 
-export const initialFAQs: FAQ[] = [
+export const initialFAQs = [
   {
     _id: '1',
     category: 'privacy',

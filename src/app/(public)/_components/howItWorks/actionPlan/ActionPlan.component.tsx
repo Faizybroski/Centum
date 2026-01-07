@@ -1,49 +1,87 @@
 'use client'
 
-// import { Card } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { CheckCircle2, CircleCheck } from 'lucide-react'
-// import { motion } from 'framer-motion'
-// import { containerVariants, slideLeftVariant, slideRightVariant } from '@/utils/animation.util'
+import { motion } from 'framer-motion'
+import { containerVariants, slideLeftVariant, slideRightVariant } from '@/utils/animation.util'
 import React from 'react'
 // import { Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
 // import {Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react/components/Accordion";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 
+// const items = [
+//   {
+//     title: 'Clinical Summary',
+//     text: 'Overall positive findings. Keep up the good work! Recommend following up with your primary care doctor.',
+//   },
+//   {
+//     title: 'Foods to Enjoy',
+//     text: 'Mackerel, Sardines, Herring, Walnuts, Cashews, Acai, Acorn Squash',
+//   },
+//   {
+//     title: 'Foods to Limit',
+//     text: 'Processed foods, refined sugars, trans fats, excessive alcohol',
+//   },
+//   {
+//     title: 'Activities to Enjoy',
+//     text: 'Swimming, walking, yoga, strength training, cycling',
+//   },
+//   {
+//     title: 'Activities to Limit',
+//     text: 'Excessive high-intensity exercise, prolonged sitting',
+//   },
+//   {
+//     title: 'Self Care',
+//     text: 'Prioritize 7-9 hours sleep, stress management, meditation, regular health check-ups',
+//   },
+//   {
+//     title: 'Supplement Recommendations',
+//     text: 'Omega-3 Fatty Acids, Red Yeast Rice, Vitamin D3, Magnesium',
+//   },
+// ]
 const items = [
   {
     title: 'Clinical Summary',
+    preview: 'Overall health markers look positive.',
     text: 'Overall positive findings. Keep up the good work! Recommend following up with your primary care doctor.',
   },
   {
     title: 'Foods to Enjoy',
+    preview: 'Heart-healthy fats and nutrient-dense foods.',
     text: 'Mackerel, Sardines, Herring, Walnuts, Cashews, Acai, Acorn Squash',
   },
   {
     title: 'Foods to Limit',
+    preview: 'Reduce inflammatory and highly processed foods.',
     text: 'Processed foods, refined sugars, trans fats, excessive alcohol',
   },
   {
     title: 'Activities to Enjoy',
+    preview: 'Low-impact, sustainable movement.',
     text: 'Swimming, walking, yoga, strength training, cycling',
   },
   {
     title: 'Activities to Limit',
+    preview: 'Avoid overtraining and long sedentary periods.',
     text: 'Excessive high-intensity exercise, prolonged sitting',
   },
   {
     title: 'Self Care',
+    preview: 'Daily habits that support long-term health.',
     text: 'Prioritize 7-9 hours sleep, stress management, meditation, regular health check-ups',
   },
   {
     title: 'Supplement Recommendations',
+    preview: 'Targeted support based on your results.',
     text: 'Omega-3 Fatty Acids, Red Yeast Rice, Vitamin D3, Magnesium',
   },
 ]
 
 export default function ActionPlan() {
-  const [open, setOpen] = React.useState(0)
+  // const [open, setOpen] = React.useState(0)
+  const [expanded, setExpanded] = React.useState<number | null>(null)
 
-  const handleOpen = (value: any) => setOpen(open === value ? 0 : value)
+  // const handleOpen = (value: any) => setOpen(open === value ? 0 : value)
   return (
     <section className="py-12 sm:py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,46 +90,89 @@ export default function ActionPlan() {
         </div>
         <div className="space-y-4">
           {items.map((item, index) => {
+            // const id = index + 1 // unique ID per accordion
+            const isOpen = expanded === index
+            return (
+              <div key={index} className="border rounded-lg px-6 py-4 bg-white shadow-sm">
+                <div className="flex gap-3">
+                  <CircleCheck className="h-5 w-5 text-primary mt-1" />
+
+                  <div className="flex-1">
+                    {/* Title */}
+                    <h3 className="font-medium text-gray-900">{item.title}</h3>
+
+                    {/* Preview + Read more inline */}
+                    <span className={`text-sm text-gray-600 ${!isOpen ? 'line-clamp-2' : ''}`}>
+                      {item.preview}
+                      {!isOpen && (
+                        <button onClick={() => setExpanded(index)} className="ml-2 text-sm text-primary font-medium hover:underline inline">
+                          {' '}
+                          Read more
+                        </button>
+                      )}
+                    </span>
+
+                    {/* Expanded content */}
+                    {isOpen && (
+                      <>
+                        <span className="text-sm text-gray-600">{item.text}{" "}</span>
+
+                        <button onClick={() => setExpanded(null)} className="mt-2 text-sm text-primary font-medium hover:underline">
+                          Read less
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        {/* {items.map((item, index) => {
             const id = index + 1 // unique ID per accordion
 
-            return (
-              // <Accordion
-              //   id={id.toString()}
-              //   key={id}
-              //   className="rounded-md border px-6"
-              //   open={open === id}
-              //   icon={<Icon id={id} open={open} />}
-              // >
-              //   <div className="flex items-center justify-center">
-              //     <CircleCheck className="mr-4" />
+return (
+        {/* <Accordion
+                id={id.toString()}
+                key={id}
+                className="rounded-md border px-6"
+                open={open === id}
+                icon={<Icon id={id} open={open} />}
+              >
+                <div className="flex items-center justify-center">
+                  <CircleCheck className="mr-4" />
 
-              //     <AccordionHeader
-              //       className="border-b-0"
-              //       onClick={() => handleOpen(id)}
-              //     >
-              //       {item.title}
-              //     </AccordionHeader>
-              //   </div>
+                  <AccordionHeader
+                    className="border-b-0"
+                    onClick={() => handleOpen(id)}
+                  >
+                    {item.title}
+                  </AccordionHeader>
+                </div>
 
-              //   <AccordionBody>
-              //     {item.text}
-              //   </AccordionBody>
-              // </Accordion>
-              <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="bg-white rounded-lg shadow-sm px-6 border">
-                <AccordionItem value={id.toString()}>
-                  <AccordionTrigger className="flex items-center justify-between border-b-0 py-4 group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">
-                    <div className="flex items-center gap-3 group-data-[state=open]:text-primary">
-                      <CircleCheck className="text-primary h-5 w-5" />
-                      <span>{item.title}</span>
+                <AccordionBody>
+                  {item.text}
+                </AccordionBody>
+              </Accordion>  
+
+        <Accordion key={id} type="single" collapsible value={open === id ? id.toString() : ''} onValueChange={(value) => handleOpen(Number(value))} className="bg-white rounded-lg shadow-sm px-6 border">
+                        <AccordionItem value={id.toString()}>
+                  <AccordionTrigger className="flex flex-col items-start gap-1 border-b-0 py-4 group hover:no-underline focus:no-underline hover:text-primary">
+                    <div className="flex items-center gap-3 w-full">
+                      <CircleCheck className="text-primary h-5 w-5 flex-shrink-0" />
+                      <span className="font-medium">{item.title}</span>
                     </div>
+
+                    <span className="text-sm text-gray-500 pl-8">
+                      {item.preview}
+                      <span className="ml-1 text-xs text-gray-400 italic">(Preview)</span>
+                    </span>
                   </AccordionTrigger>
 
                   <AccordionContent className="pb-4">{item.text}</AccordionContent>
                 </AccordionItem>
-              </Accordion>
-            )
-          })}
-        </div>
+              </Accordion> 
+        )} */}
 
         {/* <div className="space-y-4 sm:space-y-6">
           {items.map((item, index) => (
