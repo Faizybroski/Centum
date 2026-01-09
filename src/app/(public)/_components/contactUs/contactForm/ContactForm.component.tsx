@@ -37,8 +37,8 @@ export default function ContactForm() {
     }
   }
 
-  const mapUrl =
-    "https://maps.googleapis.com/maps/api/staticmap?center=Kampung%20Bali,Jakarta&zoom=15&size=600x600&maptype=roadmap&markers=color:0x16AF9D|Kampung%20Bali&key=YOUR_API_KEY";
+  // const mapUrl =
+  //   "https://maps.googleapis.com/maps/api/staticmap?center=Kampung%20Bali,Jakarta&zoom=15&size=600x600&maptype=roadmap&markers=color:0x16AF9D|Kampung%20Bali&key=YOUR_API_KEY";
 
 
   return (

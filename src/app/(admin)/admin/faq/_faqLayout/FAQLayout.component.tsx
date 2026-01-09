@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import AddFAQForm from '../_components/FAQForm/FAQForm.component'
 import FAQSkeleton from '@/components/skeletons/faq/FAQSkeleton.component'
 import FAQEmptyState from '@/components/noFAQFound/NoFAQFound.component'
-import { CirclePlus, HelpCircle, CircleCheck } from 'lucide-react'
+import { CirclePlus, HelpCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import ConfirmDeleteDialog from '@/components/common/ConfirmDeleteDialog.component'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
@@ -12,23 +12,43 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { Button } from '@/components/ui/button'
 import { initialFAQs } from '@/dto/FAQ.dto'
 import { TSchema } from '../_components/FAQForm/FAQForm.schema'
-import { FAQ_CATEGORIES, FAQCategory, isFAQCategory, categoryPriority } from '@/constants/faqCategories'
+import FAQItem from '../_components/FAQ/FAQItem'
+import { FAQCategory, isFAQCategory, categoryPriority } from '@/constants/faqCategories'
 import { useGetFaqsQuery, useCreateFaqMutation, useUpdateFaqMutation, useDeleteFaqMutation } from '@/redux/services/admin/faq.api'
 import { FAQ } from '@/types/FAQs.type'
+
+// const FAQItem = ({ faq, onEdit, onDelete }: { faq: FAQ; onEdit: (faq: FAQ) => void; onDelete: (faq: FAQ) => void }) => (
+//   <Accordion type="single" collapsible className="border rounded-lg shadow-sm px-4">
+//     <AccordionItem value={faq._id}>
+//       <AccordionTrigger className="flex items-center justify-between border-b-0 py-4 group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">
+//         <div className="flex items-center gap-3 group-data-[state=open]:text-primary">
+//           <CircleCheck className="flex justify-between text-primary h-5 w-5" />
+//           <span>{faq.question}</span>
+//         </div>
+//       </AccordionTrigger>
+
+//       <AccordionContent className="pb-3">
+//         {faq.answer}
+//         <div className="pt-3 flex gap-2">
+//           <Button size="sm" variant="outline" onClick={() => onEdit(faq)}>
+//             Edit
+//           </Button>
+//           <Button size="sm" variant="destructive" onClick={() => onDelete(faq)}>
+//             Delete
+//           </Button>
+//         </div>
+//       </AccordionContent>
+//     </AccordionItem>
+//   </Accordion>
+// )
 
 export default function Layout() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
   const [openCategories, setOpenCategories] = useState<string[]>([])
-  // const [faq, setFaqs] = useState<FAQ[]>(initialFAQs)
-  const [accordionOpen, setAccordionOpen] = useState<string | undefined>()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingFaq, setEditingFaq] = useState<FAQ | null>(null)
   const [faqToDelete, setFaqToDelete] = useState<FAQ | null>(null)
 
-  // const queryArg = useMemo(() => (selectedCategory ? { category: selectedCategory } : undefined), [selectedCategory])
-
-  // const { data, isLoading } = useGetFaqsQuery(selectedCategory ? { category: selectedCategory } : undefined)
-  // const { data, isLoading, isFetching } = useGetFaqsQuery(queryArg)
   const { data, isLoading, isFetching } = useGetFaqsQuery()
 
   const [createFaq] = useCreateFaqMutation()
@@ -36,22 +56,34 @@ export default function Layout() {
   const [deleteFaq, { isLoading: isDeleting }] = useDeleteFaqMutation()
   const faqs: FAQ[] = data ?? initialFAQs
 
+  const { draftFaqs, publishedFaqs } = useMemo(() => {
+    const source = selectedCategory ? faqs.filter((f) => f.category === selectedCategory) : faqs
+
+    return {
+      draftFaqs: source.filter((f) => f.status === 'draft'),
+      publishedFaqs: source.filter((f) => f.status !== 'draft'),
+    }
+  }, [faqs, selectedCategory])
+
+  const groupByCategory = (list: FAQ[]) =>
+    list.reduce<Record<string, FAQ[]>>((acc, faq) => {
+      if (!acc[faq.category]) acc[faq.category] = []
+      acc[faq.category].push(faq)
+
+      acc[faq.category].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+      return acc
+    }, {})
+
   useEffect(() => {
     if (selectedCategory && isFAQCategory(selectedCategory)) {
-      // Open only the selected category
       setOpenCategories([selectedCategory])
-    }
-
-    if (!selectedCategory) {
-      // Default behavior when "All" is selected
-      setOpenCategories(['General'])
     }
   }, [selectedCategory])
 
-  // const filteredFaqs = useMemo(() => {
-  //   if (!selectedCategory) return faqs
-  //   return faqs.filter((faq) => faq.category === selectedCategory)
-  // }, [faqs, selectedCategory])
+  const draftGroupedFaqs = useMemo(() => groupByCategory(draftFaqs), [draftFaqs])
+
+  const publishedGroupedFaqs = useMemo(() => groupByCategory(publishedFaqs), [publishedFaqs])
 
   const groupedFaqs = useMemo(() => {
     const source = selectedCategory ? faqs.filter((f) => f.category === selectedCategory) : faqs
@@ -67,12 +99,7 @@ export default function Layout() {
     }, {})
   }, [faqs, selectedCategory])
 
-  // const { data: allFaqsData } = useGetFaqsQuery(undefined)
-
-  // Extract unique categories dynamically
   const categories = useMemo<FAQCategory[]>(() => {
-    // if (!data) return []
-
     const set = new Set<FAQCategory>()
     faqs.forEach((f) => {
       if (isFAQCategory(f.category)) {
@@ -80,7 +107,6 @@ export default function Layout() {
       }
     })
     return Array.from(set).sort((a, b) => categoryPriority.get(a)! - categoryPriority.get(b)!)
-    // return Array.from(set)
   }, [faqs])
 
   const handleSubmit = async (data: TSchema) => {
@@ -88,7 +114,6 @@ export default function Layout() {
       await updateFaq({ id: editingFaq._id, ...data })
       setEditingFaq(null)
     } else {
-      // await createFaq({ ...data, status: 'saved' })
       await createFaq({ ...data })
     }
     setDialogOpen(false)
@@ -148,8 +173,50 @@ export default function Layout() {
       {/* {!isLoading && !isFetching && filteredFaqs.length === 0 && <FAQEmptyState />} */}
       {!isLoading && !isFetching && Object.keys(groupedFaqs).length === 0 && <FAQEmptyState />}
 
+      {Object.keys(draftGroupedFaqs).length > 0 && (
+        <Accordion type="multiple" className="space-y-4">
+          <AccordionItem value="drafts" className="border rounded-lg bg-yellow-50">
+            <AccordionTrigger className="px-6 py-4 text-lg font-semibold text-yellow-700 hover:no-underline group hover:no-underline focus:no-underline hover:text-yellow-900 hover:cursor-pointer">Draft FAQs</AccordionTrigger>
+
+            <AccordionContent className="px-6 pb-4 space-y-3">
+              {Object.entries(draftGroupedFaqs)
+                .sort(([a], [b]) => {
+                  const orderA = isFAQCategory(a) ? categoryPriority.get(a)! : Number.MAX_SAFE_INTEGER
+                  const orderB = isFAQCategory(b) ? categoryPriority.get(b)! : Number.MAX_SAFE_INTEGER
+                  return orderA - orderB
+                })
+                .map(([category, faqs]) => (
+                  <Accordion key={category} type="multiple" className="space-y-2">
+                    <AccordionItem value={category} className="border rounded-md">
+                      <AccordionTrigger className="px-4 py-3 font-medium flex items-center justify-between border-b-0 py-4 group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">
+                        {category}
+                      </AccordionTrigger>
+
+                      <AccordionContent className="space-y-2 px-4 pb-4">
+                        {faqs.map((faq) => (
+                          <FAQItem
+                            key={faq._id}
+                            faq={faq}
+                            onEdit={(faq) => {
+                              setEditingFaq(faq)
+                              setDialogOpen(true)
+                            }}
+                            onDelete={(faq) => {
+                              setFaqToDelete(faq)
+                            }}
+                          />
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                ))}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
+
       {/* {!isLoading && filteredFaqs.length > 0 && ( */}
-      {!isLoading && (
+      {/* {!isLoading && (
         <Accordion type="multiple" value={openCategories} onValueChange={setOpenCategories} className="space-y-4">
           {Object.entries(groupedFaqs)
             .sort(([a], [b]) => {
@@ -159,7 +226,7 @@ export default function Layout() {
             })
             .map(([category, faqs]) => (
               <AccordionItem key={category} value={category} className="bg-white border rounded-lg shadow-sm">
-                {/* CATEGORY HEADER */}
+          
                 <AccordionTrigger className="px-6 py-4 text-lg font-semibold text-gray-700 hover:no-underline group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">{category}</AccordionTrigger>
 
                 <AccordionContent className="px-6 pb-4 space-y-3">
@@ -202,6 +269,38 @@ export default function Layout() {
                       </Accordion>
                     )
                   })}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+        </Accordion>
+      )} */}
+
+      {Object.keys(publishedGroupedFaqs).length > 0 && (
+        <Accordion type="multiple" value={openCategories} onValueChange={setOpenCategories} className="space-y-4">
+          {Object.entries(publishedGroupedFaqs)
+            .sort(([a], [b]) => {
+              const orderA = isFAQCategory(a) ? categoryPriority.get(a)! : Number.MAX_SAFE_INTEGER
+              const orderB = isFAQCategory(b) ? categoryPriority.get(b)! : Number.MAX_SAFE_INTEGER
+              return orderA - orderB
+            })
+            .map(([category, faqs]) => (
+              <AccordionItem key={category} value={category} className="bg-white border rounded-lg shadow-sm">
+                <AccordionTrigger className="px-6 py-4 text-lg font-semibold text-gray-700 hover:no-underline group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">{category}</AccordionTrigger>
+
+                <AccordionContent className="px-6 pb-4 space-y-3">
+                  {faqs.map((faq) => (
+                    <FAQItem
+                      key={faq._id}
+                      faq={faq}
+                      onEdit={(faq) => {
+                        setEditingFaq(faq)
+                        setDialogOpen(true)
+                      }}
+                      onDelete={(faq) => {
+                        setFaqToDelete(faq)
+                      }}
+                    />
+                  ))}
                 </AccordionContent>
               </AccordionItem>
             ))}

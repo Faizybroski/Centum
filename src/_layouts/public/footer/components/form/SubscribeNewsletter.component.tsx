@@ -67,7 +67,7 @@ export default function SubscribeNewsletter() {
             />
             <Button 
               type="submit" 
-              className="w-full bg-green-600 hover:bg-green-700 mt-3" 
+              className="w-full bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-green-700 mt-3" 
               disabled={isLoading}
             >
               Submit

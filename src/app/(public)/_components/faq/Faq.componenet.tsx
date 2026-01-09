@@ -94,7 +94,6 @@ export default function FAQPage() {
                           <AccordionItem value={id}>
                             <AccordionTrigger className="flex items-center justify-between border-b-0 py-4 group hover:no-underline focus:no-underline hover:text-primary hover:cursor-pointer">
                               <div className="flex items-center gap-3 group-data-[state=open]:text-primary">
-                                {/* <CircleCheck className="flex justify-between text-primary h-5 w-5" /> */}
                                 <div className="flex flex-col">
                                   <span>{faq.question}</span>
 
