@@ -1,30 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Bell, Lock, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
+import ConfirmDeleteDialog from '@/components/common/ConfirmDeleteDialog.component'
+import { ChangePasswordDialog } from '@/app/(customer)/customer/profile/_components/passwordChange/ChangePasswordDialog.component'
+import { Lock, Trash2 } from 'lucide-react'
 
 import { useDeleteAccountMutation } from '@/redux/services/auth.api'
 import { useRouter } from 'next/navigation'
 import { handleLogout } from '@/utils'
 
 export default function AccountSettings() {
+  const [accountPasswordChange, setAccountPasswordChange] = useState(false)
+  const [accountToDelete, setAccountToDelete] = useState(false)
   const [deleteAccount, { isLoading }] = useDeleteAccountMutation()
   const router = useRouter()
 
-  const handleDelete = async () => {
-    const confirmed = window.confirm('This action is permanent. Your account will be deleted forever. Continue?')
-
-    if (!confirmed) return
+  const handleConfirmDelete = async () => {
+    if (!accountToDelete) return
 
     try {
       await deleteAccount().unwrap()
-
+      toast.success('Account deleted successfully')
       // Optional: clear tokens manually if you store them
-      await handleLogout()
-
+      handleLogout()
       router.replace('/login')
     } catch (error) {
       console.error('Delete account failed:', error)
+      toast.error('Failed to delete Account')
     }
   }
 
@@ -44,11 +47,11 @@ export default function AccountSettings() {
             <h3 className="text-[#0B342D] text-base">Change Password</h3>
             <p className="text-[#0B342D] text-sm">Update your account password</p>
           </div>
-          <Button variant="outline" className="bg-gray-50 border-gray-150 text-gray-900">
+          <Button variant="outline" onClick={() => setAccountPasswordChange(true)} className="bg-gray-50 border-gray-150 text-gray-900">
             Update
           </Button>
         </Card>
-        <Card className="flex items-center gap-4 py-[17px] pr-[38px] pl-[17px]">
+        {/* <Card className="flex items-center gap-4 py-[17px] pr-[38px] pl-[17px]">
           <div className="size-10 rounded-full bg-[#0B342D1A] flex items-center justify-center">
             <Bell className="w-5 h-5 text-[#0B342D]" />
           </div>
@@ -59,7 +62,7 @@ export default function AccountSettings() {
           <Button variant="outline" className="bg-gray-50 border-gray-150 text-gray-900">
             Manage
           </Button>
-        </Card>
+        </Card> */}
 
         <Card className="flex items-center gap-4 py-[17px] pr-[38px] pl-[17px] border-red-300">
           <div className="size-10 rounded-full bg-red-200 flex items-center justify-center">
@@ -69,11 +72,22 @@ export default function AccountSettings() {
             <h3 className="text-[#0B342D] text-base">Delete Account</h3>
             <p className="text-[#0B342D] text-sm">Delete your account permanently</p>
           </div>
-          <Button variant="destructive" className="text-white" onClick={handleDelete} disabled={isLoading}>
+          <Button variant="destructive" className="text-white" onClick={() => setAccountToDelete(true)} disabled={isLoading}>
             Delete
           </Button>
         </Card>
       </div>
+
+      <ChangePasswordDialog open={!!accountPasswordChange} onClose={() => setAccountPasswordChange(false)} />
+
+      <ConfirmDeleteDialog
+        open={!!accountToDelete}
+        title="Delete Account"
+        description="This action is permanent. Your account will be deleted forever. Continue?"
+        loading={isLoading}
+        onClose={() => setAccountToDelete(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </Card>
   )
 }

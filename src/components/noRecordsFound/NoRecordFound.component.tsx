@@ -11,7 +11,7 @@ export default function NoRecordsFound({
 }) {
   return (
     <div className={`flex flex-col items-center justify-center text-center p-6 rounded-2xl ${isCard ? 'shadow-sm bg-white border border-gray-100' : ''}`}>
-      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
+      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 text-green-600 mb-4">
         <Blocks className="w-8 h-8" />
       </div>
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>

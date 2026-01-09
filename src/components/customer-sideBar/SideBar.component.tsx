@@ -87,7 +87,7 @@ const CustomerSidebar = () => {
           <DropdownMenuTrigger asChild>
             <div className="relative rounded-full flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50">
               <Avatar className="h-10 w-10">
-                <AvatarFallback className="bg-primary text-white text-sm font-bold">{user ? user.userProfile.full_name : 'U'}</AvatarFallback>
+                <AvatarFallback className="bg-primary text-white text-sm font-bold">{user ? getInitials(user.userProfile.full_name) : 'U'}</AvatarFallback>
               </Avatar>
 
               <div className="flex-1 min-w-0">

@@ -1,6 +1,12 @@
 import { UserDTO } from '@/dto'
 import { api } from './api.config'
 
+interface ChangePasswordPayload {
+  current_password: string
+  new_password: string
+  confirm_new_password: string
+}
+
 export const extendedApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<{ access_token: string; refresh_token: string; role: string }, { email: string; password: string }>({
@@ -66,7 +72,15 @@ export const extendedApi = api.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+
+    changePassword: builder.mutation<void, ChangePasswordPayload>({
+      query: (body) => ({
+        url: "/v1/user/change-password",
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 })
 
-export const { useLoginMutation, useProfileQuery, useLazyProfileQuery, useSignupMutation, useLazyVerifyEmailQuery, useUpdateProfileMutation, useForgotPasswordMutation, useResetPasswordMutation, useDeleteAccountMutation } = extendedApi
+export const { useLoginMutation, useProfileQuery, useLazyProfileQuery, useSignupMutation, useLazyVerifyEmailQuery, useUpdateProfileMutation, useForgotPasswordMutation, useResetPasswordMutation, useDeleteAccountMutation, useChangePasswordMutation  } = extendedApi

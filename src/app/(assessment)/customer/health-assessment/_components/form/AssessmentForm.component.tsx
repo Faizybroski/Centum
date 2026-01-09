@@ -87,7 +87,7 @@ export default function AssessmentForm({ formDef, onFormChange, step, formMethod
       <form className="space-y-8">
         {/* Card-style header with icon, title, and description */}
         <div className="flex items-start gap-3 my-6">
-          <div className="bg-green-100 text-green-600 rounded-full p-4">
+          <div className="bg-primary/30 text-primary rounded-full p-4">
             <GenerateIcon name="clipboard-plus" size={24} />
           </div>
           <div className="flex flex-col">

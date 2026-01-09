@@ -12,18 +12,18 @@ export default function FormStepProgress({ steps, currentStep, forProfile }: { s
         </div>
 
         <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
-          <div className="bg-green-600 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentStep + 1) / (forProfile ? steps.length - 1 : steps.length)) * 100}%` }} />
+          <div className="bg-primary h-2 rounded-full transition-all duration-300" style={{ width: `${((currentStep + 1) / (forProfile ? steps.length - 1 : steps.length)) * 100}%` }} />
         </div>
 
         <div className="flex justify-between">
           {forProfile
             ? steps.slice(0, steps.length - 1).map((stepObj: any, i: number) => (
-                <span key={i} className={`text-sm font-medium ${i <= currentStep ? 'text-green-600' : 'text-gray-400'}`}>
+                <span key={i} className={`text-sm font-medium ${i <= currentStep ? 'text-primary' : 'text-gray-400'}`}>
                   {stepObj.label}
                 </span>
               ))
             : steps.map((stepObj: any, i: number) => (
-                <span key={i} className={`text-sm font-medium ${i <= currentStep ? 'text-green-600' : 'text-gray-400'}`}>
+                <span key={i} className={`text-sm font-medium ${i <= currentStep ? 'text-primary' : 'text-gray-400'}`}>
                   {stepObj.label}
                 </span>
               ))}
