@@ -26,8 +26,8 @@ const pricingTiers: PricingTier[] = [
   {
     name: 'Core',
     price: {
-      monthly: '$99/month',
-      yearly: '$699/year',
+      monthly: '$89/month',
+      yearly: '$999/year',
     },
     biomarkers: '100 key biomarkers',
     reTests: '25',
@@ -41,8 +41,8 @@ const pricingTiers: PricingTier[] = [
   {
     name: 'Plus',
     price: {
-      monthly: '$99/month',
-      yearly: '$999/year',
+      monthly: '$119/month',
+      yearly: '$1299/year',
     },
     biomarkers: '100 key biomarkers',
     reTests: '50',
@@ -57,8 +57,8 @@ const pricingTiers: PricingTier[] = [
   {
     name: 'Prime',
     price: {
-      monthly: '$199/month',
-      yearly: '$1999/year',
+      monthly: '$279/month',
+      yearly: '$2999/year',
     },
     biomarkers: '200 key biomarkers',
     reTests: '100',
