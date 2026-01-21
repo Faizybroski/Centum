@@ -29,7 +29,7 @@ export const paths = {
   //Extra resources
   privacy: () => `/privacy-policy`,
   // securityFaq: () => `/security-faq`,
-  securityFaq: () => `/faq`,
+  faq: () => `/faq`,
   userGuide: () => `/user-guide`,
   // Project paths admin
   adminDashboard: () => `${paths.admin}/dashboard`,
@@ -38,4 +38,5 @@ export const paths = {
   adminUserDetail: (id: string) => `${paths.admin}/user-detail/${id}`,
   adminFailedReports: () => `${paths.admin}/failed-reports`,
   adminFAQs: () => `${paths.admin}/faq`,
+  adminWaitlist: () => `${paths.admin}/waitlist`,
 }

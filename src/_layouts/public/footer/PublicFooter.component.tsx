@@ -81,7 +81,7 @@ export default function PublicFooter() {
               </Link>
             </li>
             <li>
-              <Link href={paths.securityFaq()} className="hover:text-white">
+              <Link href={paths.faq()} className="hover:text-white">
                 {/* Security & Privacy  */}
                 FAQ
               </Link>
@@ -94,7 +94,7 @@ export default function PublicFooter() {
               Get the latest health insights and updates delivered to your inbox.
             </p>
 
-       {/* subscribe newsletter */}
+            {/* subscribe newsletter */}
             <SubscribeNewsletter />
           </div>
         </div>

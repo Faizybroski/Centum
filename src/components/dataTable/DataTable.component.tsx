@@ -27,6 +27,8 @@ export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPa
     pageCount: totalPages,
   })
 
+  console.log(data)
+
   return (
     <>
       <div className="rounded-lg overflow-x-auto">
