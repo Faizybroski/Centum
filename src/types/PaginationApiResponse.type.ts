@@ -4,4 +4,5 @@ export type TPaginationApiResponse<List> = {
   limit: number
   total_count: number
   total_pages: number
+  subscription_counts?: Record<string, number> // 👈 NEW
 }

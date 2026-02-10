@@ -11,7 +11,7 @@ import { getInitials, handleLogout } from '@/utils'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+import { Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar, SidebarFooter } from '@/components/ui/sidebar'
 import { GenerateIcon } from '@/components/GenerateIcon/GenerateIcon.component'
 import HeaderLogo from '@/components/centum-logos/HeaderLogo.component'
 import { LogOut, Menu, LayoutDashboard, Users, Calendar, Settings, UserCheck, BarChart3, Shield, Crown, User, Bell, FileText, UtensilsCrossed, DollarSign, Receipt } from 'lucide-react'
@@ -25,6 +25,7 @@ export type NavigationItem = {
 const CustomerSidebar = () => {
   const user = useReduxSelector((state) => state.user)
   const pathname = usePathname()
+  // const { setOpenMobile } = useSidebar()
 
   const isActive = (path: string) => path === pathname
   const currentPath = location.pathname
@@ -42,36 +43,50 @@ const CustomerSidebar = () => {
   // const isExpanded = navigationItems.some((i) => isActive(i.url));
 
   return (
-    <Sidebar className="border-r border-border border-px bg-card/50 backdrop-blur-sm">
-      <SidebarContent className="pt-6 flex flex-col h-full">
-        <SidebarGroup className="flex-1 flex flex-col">
+    // <Sidebar className="border-r border-border border-px bg-card/50 backdrop-blur-sm">
+    <Sidebar className="z-40">
+      {/* <SidebarContent className="pt-6 flex flex-col h-full"> */}
+      <SidebarContent>
+        <SidebarHeader>
+          {/* <SidebarGroup className="flex-1 flex flex-col"> */}
           {/* <SidebarGroupLabel className="flex items-center space-x-3 px-4 py-3 mb-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg mx-3"> */}
           {/* <HeaderLogo /> */}
-          <Link href="/" className="flex items-center justify-center h-20 p-1 mb-10">
+          {/* <Link href="/" className="flex items-center justify-center h-20 p-1 mb-10"> */}
+          <Link href={paths.customerDashboard()} className="cursor-pointer items-center h-16 flex justify-center">
             {/* <div className="relative h-[50px] w-[200px]"> */}
-            <Image src="/assets/icons/centum_health-logo.svg" alt="Centum Health" className="object-contain" height={50} width={200} priority />
+            {/* <Image src="/assets/icons/centum_health-logo.svg" alt="Centum Health" className="object-contain" height={50} width={200} priority /> */}
+            <Image src="/assets/icons/centum_health-logo.svg" alt="Centum Health" className="h-full w-auto object-contain" height={1000} width={1000} priority />
+
             {/* </div> */}
           </Link>
-          {/* </SidebarGroupLabel> */}
+        </SidebarHeader>
+        {/* <Link href={paths.adminDashboard()} className="cursor-pointer items-center h-16 flex justify-center">
+                <Image src="/assets/icons/centum_health-logo.svg" alt="Centum Health" className="h-full w-auto object-contain" height={1000} width={1000} priority />
+          </Link> */}
+        {/* </SidebarGroupLabel> */}
 
-          <SidebarGroupContent>
-            <SidebarMenu className="px-3 space-y-1">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`flex items-center gap-2 justify-start h-12 px-3 rounded-lg ${isActive(item.path) ? 'text-black bg-primary/10 border-l-5 border-black' : 'text-black-600 hover:text-black-900 hover:bg-gray-50'}`}
-                >
-                  <GenerateIcon className="h-5 w-5 mr-3" name={item.icon as IconName} />
-                  {item.label}
-                </Link>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* <SidebarGroupContent> */}
+        {/* <SidebarMenu className="px-3 space-y-1"> */}
+        <SidebarMenu className="flex flex-col mt-6 p-1 px-3 overflow-x-hidden ">
+          {navigationItems.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`flex items-center gap-2 justify-start h-12 px-3 rounded-lg ${isActive(item.path) ? 'text-black bg-primary/10 border-l-5 border-primary' : 'text-black-600 hover:text-black-900 hover:bg-gray-50'}`}
+              >
+                <GenerateIcon className="h-5 w-5 mr-3" name={item.icon as IconName} />
+                {item.label}
+              </Link>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarContent>
+      {/* </SidebarGroupContent> */}
+      {/* </SidebarGroup> */}
 
-        <div className="mt-6 p-3 border-t border-border">
-          {/* <Link href={paths.customerProfile()} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+      {/* <div className="border-t border-border"> */}
+      {/* <Link href={paths.customerProfile()} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
             <Avatar className="h-10 w-10">
               <AvatarFallback className="bg-primary text-white text-sm font-bold">{user ? user.userProfile.full_name : 'U'}</AvatarFallback>
             </Avatar>
@@ -81,8 +96,7 @@ const CustomerSidebar = () => {
               <p className="text-xs text-gray-500 truncate">{user?.userProfile.email || 'user@example.com'}</p>
             </div>
           </Link> */}
-        
-
+      <SidebarFooter className="border-t border-border">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="relative rounded-full flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50">
@@ -117,8 +131,8 @@ const CustomerSidebar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        </div>
-      </SidebarContent>
+      </SidebarFooter>
+      {/* </div> */}
     </Sidebar>
   )
 }

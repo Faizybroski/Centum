@@ -29,10 +29,11 @@ export default function UploadFilesSection() {
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([])
   const [uploadComplete, setUploadComplete] = useState(false)
   const [fileIds, setFileIds] = useState<string[]>([])
-  const [reportTitle, setReportTitle] = useState('')
-  const [reportDate, setReportDate] = useState(new Date())
-  const [reportCategory, setReportCategory] = useState('')
-  const [reportNotes, setReportNotes] = useState('')
+  // const [reportTitle, setReportTitle] = useState('')
+  // const [reportDate, setReportDate] = useState(new Date())
+  // const [reportCategory, setReportCategory] = useState('')
+  // const [reportNotes, setReportNotes] = useState('')
+
   const [uploadFile, { isLoading }] = useUploadFileMutation()
 
   const {
@@ -54,17 +55,33 @@ export default function UploadFilesSection() {
     },
   })
 
+  const reportTitle = watch('reportTitle')
+  const reportDate = watch('reportDate')
+  const reportCategory = watch('reportCategory')
+  const reportNotes = watch('reportNotes')
+
   const categories = ['Blood Test', 'Radiology', 'Prescription', 'Pathology', 'Diagnosis Report', 'Discharge Summary', 'General Medical Report']
 
   const selectedFile = watch('file')
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await uploadFile({ files: data.file }).unwrap()
+      // const response = await uploadFile({ files: data.file }).unwrap()
+      const response = await uploadFile({
+        files: data.file,
+        reportTitle: data.reportTitle,
+        reportCategory: data.reportCategory,
+        reportNotes: data.reportNotes,
+        reportDate: moment(data.reportDate).toISOString(),
+      }).unwrap()
       setFileIds([...fileIds, ...response.filter((item: any) => item?.id && item?.status === 'ready').map((item: any) => item?.id)])
       setUploadComplete(true)
       setUploadedFiles((prev) => [...prev, ...response])
-      reset({ file: undefined, reportTitle: getValues('reportTitle') })
+      console.log('Upload successful:', response)
+      reset({
+        ...getValues(),
+        file: undefined,
+      })
       if (fileInputRef.current) fileInputRef.current.value = ''
     } catch (error) {
       console.error('Upload failed:', error)
@@ -80,7 +97,10 @@ export default function UploadFilesSection() {
   }
 
   const resetUpload = () => {
-    reset({ file: undefined, reportTitle: getValues('reportTitle'), reportDate: getValues('reportDate'), reportCategory: getValues('reportCategory'), reportNotes: getValues('reportNotes') })
+    reset({
+      ...getValues(),
+      file: undefined,
+    })
     setUploadComplete(false)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
@@ -117,7 +137,7 @@ export default function UploadFilesSection() {
                           <Upload className="h-10 w-10" />
                         </div>
                         <div className="space-y-1 sm:space-y-2">
-                          <h4 className="text-sm sm:text-lg font-medium text-gray-900">{truncateString(selectedFile?.name, 30) || 'Drop your file here'}</h4>
+                          <h4 className="text-sm sm:text-lg font-medium text-gray-900">{selectedFile?.name || 'Drop your file here'}</h4>
                           <p className="text-xs sm:text-sm text-gray-600">Or click to browse your file</p>
                         </div>
                         <label htmlFor="fileUpload" className="sr-only hidden">
@@ -155,7 +175,7 @@ export default function UploadFilesSection() {
                         <Button variant="outline" size="lg" onClick={resetUpload} type="button" className="w-full" disabled={isLoading}>
                           Remove File
                         </Button>
-                        <Button size="lg" type="submit" disabled={!reportTitle.trim() || !isValid || !selectedFile || isLoading} className="w-full">
+                        <Button size="lg" type="submit" disabled={!reportTitle?.trim() || !isValid || !selectedFile || isLoading} className="w-full">
                           {isLoading ? 'Uploading...' : 'Upload Report'}
                         </Button>
                       </div>
@@ -186,7 +206,6 @@ export default function UploadFilesSection() {
                           className="bg-white w-full h-12 px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base"
                           onChange={(e) => {
                             field.onChange(e)
-                            setReportTitle(e.target.value)
                           }}
                         />
                       )}
@@ -230,7 +249,7 @@ export default function UploadFilesSection() {
 
                   <div className="mb-4 w-full rounded-lg p-4 sm:p-6 border border-gray-300 bg-gray-50">
                     <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Category*</label>
-                    <Controller
+                    {/* <Controller
                       control={control}
                       name="reportCategory"
                       render={({ field }) => (
@@ -246,6 +265,24 @@ export default function UploadFilesSection() {
                             {categories.map((category) => (
                               <SelectItem key={category} value={category}>
                                 {category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    /> */}
+                    <Controller
+                      name="reportCategory"
+                      control={control}
+                      render={({ field }) => (
+                        <Select disabled={isLoading} value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger className="h-12 bg-white">
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {categories.map((c) => (
+                              <SelectItem key={c} value={c}>
+                                {c}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -269,19 +306,27 @@ export default function UploadFilesSection() {
               </div>
             </form>
             {uploadedFiles.length > 0 && (
+              // <FilesUploadedSection
+              //   setUploadedFiles={setUploadedFiles}
+              //   reportTitle={reportTitle}
+              //   reportDate={reportDate}
+              //   reportCategory={reportCategory}
+              //   reportNotes={reportNotes}
+              //   uploadingFile={isLoading}
+              //   uploadedFiles={uploadedFiles}
+              // />
               <FilesUploadedSection
-                setUploadedFiles={setUploadedFiles}
                 reportTitle={reportTitle}
                 reportDate={reportDate}
                 reportCategory={reportCategory}
                 reportNotes={reportNotes}
-                uploadingFile={isLoading}
                 uploadedFiles={uploadedFiles}
+                uploadingFile={isLoading}
+                setUploadedFiles={setUploadedFiles}
               />
             )}
-
             <div className="flex items-center justify-center gap-3 w-full border border-gray-200 rounded-md bg-gray-100 px-4 py-3 mt-8">
-              <ShieldCheck className='w-5 h-5'/>
+              <ShieldCheck className="w-5 h-5" />
               <span className="text-sm text-gray-600">Your report will be securely analyzed using medical-grade AI.</span>
             </div>
           </CardContent>

@@ -1,8 +1,7 @@
 export type TPaginationApiParams = {
-  page: number
-  limit: number
+  page?: number
+  limit?: number
+  subscription_type?: string | undefined
   searchVal?: string
-  sortOrder?: 'desc' | 'asc'
   searchByStatus?: string | string[]
-  sortBy?: string
 }

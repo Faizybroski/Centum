@@ -205,7 +205,7 @@ export default function ProfileForm({ userProfile }: { userProfile: UserDTO }) {
           </div>
 
           <div className="flex justify-center sm:justify-end">
-            <Button type="submit" className="flex items-center gap-2 w-full sm:w-auto" disabled={isLoading}>
+            <Button type="submit" className="bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] flex items-center gap-2 w-full sm:w-auto" disabled={isLoading}>
               <Save className="h-4 w-4" />
               {isLoading ? 'Saving...' : 'Save Changes'}
             </Button>

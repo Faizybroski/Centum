@@ -23,9 +23,11 @@ export default function ProfileLayout() {
         {/* Page Header */}
         {/* <DashboardHeader title="Profile Settings" subtitle="Manage your personal information and health preferences" /> */}
         <ProfileHeading
-          onEdit={() => {
-            setShowProfileForm(!showProfileForm)
-          }}
+          // onEdit={() => {
+          //   setShowProfileForm(!showProfileForm)
+          // }}
+          isEditing={showProfileForm}
+          onEdit={() => setShowProfileForm((prev) => !prev)}
         />
         {showProfileForm && (
           <Card className="mb-6 sm:mb-8">

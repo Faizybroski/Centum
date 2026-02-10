@@ -18,6 +18,7 @@ function UsersTable() {
   const { data, isFetching, isError } = useUsersWithFailedReportsQuery({
     page,
     limit: pageSize,
+    subscription_type: 'all'
   })
 
   const { columns } = useFailedReportsTableColumns()

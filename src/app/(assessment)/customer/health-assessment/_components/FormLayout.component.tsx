@@ -169,8 +169,8 @@ export default function HealthAssessmentForm({ forProfile = false }: { forProfil
                     Previous
                   </Button>
                 ) : null} */}
-                <div className="flex gap-2 items-center justify-end w-full">
-                  <Button onClick={next} disabled={isSaving}>
+                <div className="flex gap-2 items-center justify-end w-full ">
+                  <Button onClick={next} disabled={isSaving} className='bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]'>
                     {step === steps.length - 1 ? (
                       <>
                         Complete Assessment

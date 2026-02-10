@@ -1,6 +1,8 @@
 'use client'
 
-import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
+import React, { useState } from 'react'
+
+import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, SortingState, useReactTable } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import NoRecordsFound from '../noRecordsFound/NoRecordFound.component'
@@ -11,13 +13,14 @@ import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onRowClick?: (row: TData) => void
   page?: number
   setPage?: (page: number) => void
   totalPages?: number
   isPaginationEnabled?: boolean
 }
 
-export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPages, isPaginationEnabled = true }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPages, onRowClick, isPaginationEnabled = true }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
@@ -25,6 +28,7 @@ export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPa
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
     pageCount: totalPages,
+    getRowId: (row: any) => row._id,
   })
 
   console.log(data)
@@ -49,7 +53,15 @@ export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPa
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'} className="hover:bg-primary/5">
+                <TableRow
+                  key={row.id}
+                  onClick={() => {
+                    onRowClick?.(row.original)
+                    console.log('row.id', row.id)
+                    console.log('row.original', row.original)
+                  }}
+                  className="hover:bg-primary/5"
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="p-4">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

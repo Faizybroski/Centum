@@ -8,6 +8,7 @@ import { BarChart3, Calendar } from 'lucide-react'
 import { Eye, Download } from 'lucide-react'
 
 import NoRecordsFound from '@/components/noRecordsFound/NoRecordFound.component'
+import TableSkeleton from '@/components/skeletons/tableView/TableSkeleton.component'
 import HowToCompareReports from '../howToCompareReports/HowToCompareReports.component'
 import CompareReportDialog from '../compareReportDialog/CompareReportDialog.component'
 import { paths } from '@/navigate/paths'
@@ -20,6 +21,7 @@ import { pollingIntervalTime, truncateString } from '@/utils'
 import { useRouterTransition } from '@/hooks/useRouterTransition.hook'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function ReportHistoryLayout() {
   const [selectedReports, setSelectedReports] = useState<number[]>([])
@@ -93,13 +95,55 @@ export default function ReportHistoryLayout() {
         </motion.div>
 
         {isFetching && (
-          <div className="grid lg:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="h-48 bg-gray-200 rounded-lg"></div>
-              </div>
-            ))}
-          </div>
+          // <div className="grid lg:grid-cols-2 gap-6">
+          //   {[1, 2, 3, 4].map((i) => (
+          //     <div key={i} className="animate-pulse">
+          //       <div className="h-48 bg-gray-200 rounded-lg"></div>
+          //     </div>
+          //   ))}
+          // </div>
+          // <TableSkeleton />
+          <Table className="border rounded-lg">
+            <TableHeader>
+              <TableRow className="bg-gray-100">
+                <TableHead className="font-semibold text-gray-700">Report Name</TableHead>
+                <TableHead className="font-semibold text-gray-700">Category</TableHead>
+                <TableHead className="font-semibold text-gray-700">Date</TableHead>
+                <TableHead className="font-semibold text-gray-700">Status</TableHead>
+                <TableHead className="text-center font-semibold text-gray-700">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, rowIndex) => (
+                <TableRow key={rowIndex} className="odd:bg-gray-50 hover:bg-gray-50 transition">
+                  <TableCell className="font-medium"><Skeleton className="h-4 w-full" /></TableCell>
+
+                    <TableCell className="text-gray-600 capitalize"><Skeleton className="h-4 w-[50%]" /></TableCell>
+
+                    <TableCell className="text-gray-600"><Skeleton className="h-4 w-full" /></TableCell>
+
+                    <TableCell>
+                      <FileTypeStatusBadge />
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      <Button size="icon" variant="ghost">
+                        <Eye className="w-4 h-4 text-black" />
+                      </Button>
+                      <Button size="icon" variant="ghost">
+                        <Download className="w-4 h-4 text-black" />
+                      </Button>
+                    </TableCell>
+                  {/* {Array.from({ length: 5 }).map((_, colIndex) => (
+                    <TableCell key={colIndex}>
+                      <Skeleton className="h-4 w-full" />
+                    </TableCell>
+                  ))} */}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
 
         {isSuccess && data?.reports?.length === 0 && <NoRecordsFound title="No Reports Found" description="You don't have any health reports yet." />}
@@ -124,7 +168,7 @@ export default function ReportHistoryLayout() {
                     <TableCell className="font-medium">{truncateString(report.report_title, 60) || 'N/A'}</TableCell>
 
                     {/* Category */}
-                    <TableCell className="text-gray-600 capitalize">{report.category || 'N/A'}</TableCell>
+                    <TableCell className="text-gray-600 capitalize">{report.report_category || 'N/A'}</TableCell>
 
                     {/* Date */}
                     <TableCell className="text-gray-600">{moment(report.processed_at).format('MMM DD, YYYY')}</TableCell>

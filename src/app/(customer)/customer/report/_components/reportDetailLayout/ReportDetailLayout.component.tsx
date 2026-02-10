@@ -41,7 +41,7 @@ function ReportDetailLayout({ slug, type = 'detail' }: { slug: string; type?: 'd
           </Button>
         </div>
         {/* Report Header with Animation */}
-        {isSuccess && type == 'detail' && <ReportHeader report_title={data?.report_title} report_date={data?.processed_at} report_status={data?.status} />}
+        {isSuccess && type == 'detail' && <ReportHeader report_title={data?.report_title} report_date={data?.processed_at} report_status={data?.status} report_category={data?.report_category} report_notes={data?.report_notes} />}
         {isSuccess && type == 'summary' && <DashboardHeader title="Health Recommendations" subtitle="Personalized diet and exercise guidance based on your health profile" />}
         {(data?.status == 'processing' || data?.status == 'pending' || isLoading || isFetching) && (
           <>

@@ -127,7 +127,7 @@ export function ChangePasswordDialog({ open, onClose }: { open: boolean; onClose
               <Button type="button" variant="outline" onClick={() => onClose(false)}>
                 Cancel
               </Button>
-              <Button type="submit">{isLoading ? 'Updating...' : 'Change Password'}</Button>
+              <Button type="submit" className='bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]'>{isLoading ? 'Updating...' : 'Change Password'}</Button>
             </div>
           </form>
         </Form>

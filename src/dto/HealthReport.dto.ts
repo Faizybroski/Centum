@@ -66,6 +66,9 @@ export type LifestyleRecommendations = {
 
 export type HealthReportDetail = {
   report_title: string
+  report_category: string
+  report_notes?: string
+  report_date: string
   status: string
   critical_biomarkers: Record<string, Biomarker>
   good_biomarkers: Record<string, Biomarker>

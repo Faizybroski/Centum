@@ -7,10 +7,11 @@ import { Card } from '@/components/ui/card'
 import { Calendar, Edit, Mail, Phone } from 'lucide-react'
 
 interface Props {
+  isEditing: boolean
   onEdit: () => void
 }
 
-export default function ProfileHeading({ onEdit }: Props) {
+export default function ProfileHeading({ isEditing, onEdit }: Props) {
   const { userProfile } = useReduxSelector((state) => state.user)
 
   return (
@@ -56,7 +57,7 @@ export default function ProfileHeading({ onEdit }: Props) {
         {/* Right: Edit Button */}
         <Button size="sm" onClick={onEdit} className="bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]">
           <Edit className="w-4 h-4 mr-2" />
-          Edit Profile
+           {isEditing ? "Cancel Editing" : "Edit Profile"}
         </Button>
       </div>
     </Card>
