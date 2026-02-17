@@ -88,6 +88,9 @@ export default function HealthAssessmentForm({ forProfile = false }: { forProfil
         }
       }
       setConsentError('')
+      import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
+
+      // ...
       try {
         await saveFormStep({
           step_number: step + 1,
@@ -95,6 +98,9 @@ export default function HealthAssessmentForm({ forProfile = false }: { forProfil
         })
 
         console.log('Form submitted successfully')
+
+        sendEvent(ANALYTICS_EVENTS.HEALTH_ASSESSMENT_COMPLETE, { is_profile: forProfile })
+
         router.push(paths.customerUpload())
       } catch (err) {
         setConsentError('Failed to submit assessment. Please try again.')
@@ -170,7 +176,7 @@ export default function HealthAssessmentForm({ forProfile = false }: { forProfil
                   </Button>
                 ) : null} */}
                 <div className="flex gap-2 items-center justify-end w-full ">
-                  <Button onClick={next} disabled={isSaving} className='bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]'>
+                  <Button onClick={next} disabled={isSaving} className="bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)]">
                     {step === steps.length - 1 ? (
                       <>
                         Complete Assessment

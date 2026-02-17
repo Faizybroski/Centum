@@ -35,17 +35,9 @@ const waitlistSchema = z.object({
   interview_interest: z.boolean(),
 })
 
-type Feature =
-  | 'biomarkers'
-  | 'wearables'
-  | 'ai_recommendations'
-  | 'secure_storage'
-  | 'education'
-  | 'progress_tracking'
-  | 'addon_tests'
+type Feature = 'biomarkers' | 'wearables' | 'ai_recommendations' | 'secure_storage' | 'education' | 'progress_tracking' | 'addon_tests'
 
-
-  const FEATURE_OPTIONS = [
+const FEATURE_OPTIONS = [
   ['biomarkers', 'Personalized biomarker insights'],
   ['wearables', 'Wearable integrations'],
   ['ai_recommendations', 'AI recommendations'],
@@ -63,6 +55,8 @@ interface WaitlistDialogProps {
   buttonClassName?: string
   subscriptionType?: string
 }
+
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitlist', buttonClassName, subscriptionType }: WaitlistDialogProps) {
   const [open, setOpen] = useState(false)
@@ -97,6 +91,7 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
         subscription_type: subscriptionType,
       }).unwrap()
 
+      sendEvent(ANALYTICS_EVENTS.WAITLIST_FORM_COMPLETE, { plan: planName, subscription_type: subscriptionType })
       toast.success('You’re on the waitlist 🎉')
       form.reset()
       setOpen(false)
@@ -270,7 +265,7 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                 )}
               />
 
-              <Button type='submit' disabled={isLoading} className="w-full">
+              <Button type="submit" disabled={isLoading} className="w-full">
                 {isLoading ? 'Submitting…' : 'Submit'}
               </Button>
             </form>

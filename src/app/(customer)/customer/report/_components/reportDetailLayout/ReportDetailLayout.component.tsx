@@ -17,6 +17,8 @@ import { Button } from '@/components/ui/button'
 import { useGetReportByIdQuery } from '@/redux/services/health-report.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
+
 function ReportDetailLayout({ slug, type = 'detail' }: { slug: string; type?: 'detail' | 'summary' }) {
   let pollingStatus = ['ready', 'error', 'failed']
   const router = useRouter()
@@ -30,6 +32,12 @@ function ReportDetailLayout({ slug, type = 'detail' }: { slug: string; type?: 'd
     }
   }, [data, isLoading])
 
+  useEffect(() => {
+    if (isSuccess && data?.status === 'ready') {
+      sendEvent(ANALYTICS_EVENTS.REPORT_VIEWED, { report_id: slug, category: data.report_category })
+    }
+  }, [isSuccess, data, slug])
+
   return (
     <div className="p-3 md:p-8">
       <div className="max-w-4xl mx-auto">
@@ -41,7 +49,9 @@ function ReportDetailLayout({ slug, type = 'detail' }: { slug: string; type?: 'd
           </Button>
         </div>
         {/* Report Header with Animation */}
-        {isSuccess && type == 'detail' && <ReportHeader report_title={data?.report_title} report_date={data?.processed_at} report_status={data?.status} report_category={data?.report_category} report_notes={data?.report_notes} />}
+        {isSuccess && type == 'detail' && (
+          <ReportHeader report_title={data?.report_title} report_date={data?.processed_at} report_status={data?.status} report_category={data?.report_category} report_notes={data?.report_notes} />
+        )}
         {isSuccess && type == 'summary' && <DashboardHeader title="Health Recommendations" subtitle="Personalized diet and exercise guidance based on your health profile" />}
         {(data?.status == 'processing' || data?.status == 'pending' || isLoading || isFetching) && (
           <>

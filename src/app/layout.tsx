@@ -14,6 +14,8 @@ export const generateMetadata = async () =>
     keywords: ['about', 'company', 'mission'],
   })
 
+import { GoogleAnalytics } from '@next/third-parties/google'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +30,7 @@ export default function RootLayout({
           </BProgressProviders>
         </ReduxProvider>
         <Toaster position="top-right" theme="light" richColors={true} />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>
     </html>
   )

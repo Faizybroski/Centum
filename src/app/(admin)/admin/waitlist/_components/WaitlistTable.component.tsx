@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { NA, FEATURE_LABELS, HEALTH_GOAL_LABELS, PRICING_LABELS, TRACKING_LABELS } from '@/dto/Waitlist.dto'
 import { Download } from 'lucide-react'
 import { exportToCSV } from '@/utils/exportToCSV'
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 const SUBSCRIPTION_LABELS: Record<string, string> = {
   core: 'Core',
@@ -85,15 +86,17 @@ function WaitlistsTable() {
             <SelectItem value="prime">Prime</SelectItem>
           </SelectContent>
         </Select>
+
         <Button
           variant="outline"
           size="sm"
           disabled={!data?.list?.length}
           onClick={() => {
             if (!data?.list?.length) return
-            
+
             const formatted = formatWaitlistForCSV(data.list)
             exportToCSV(formatted, `waitlists_${subscriptionType}_${new Date().toISOString()}.csv`)
+            sendEvent(ANALYTICS_EVENTS.ADMIN_WAITLIST_EXPORT, { subscription_type: subscriptionType })
           }}
         >
           <Download className="w-4 h-4 mr-2" />

@@ -21,6 +21,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
+
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [signup, { isLoading }] = useSignupMutation()
@@ -41,6 +43,7 @@ export default function SignupForm() {
     try {
       const response = await signup(data).unwrap()
       if (response) {
+        sendEvent(ANALYTICS_EVENTS.USER_REGISTER, { method: 'email' })
         router.push(paths.registrationSuccess(data.email))
       }
     } catch (error: any) {

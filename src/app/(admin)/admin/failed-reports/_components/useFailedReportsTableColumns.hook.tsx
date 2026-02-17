@@ -5,6 +5,7 @@ import { FailedReportDTO } from '@/dto'
 import { useRetryReportGenerationMutation } from '@/redux/services/admin/reports.api'
 import { StatusBadge } from '@/components/statusBadge/StatusBadge.component'
 import { RotateCw } from 'lucide-react'
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 export default function useReportsColumns() {
   const [retryReportGenerationMutation, { isLoading }] = useRetryReportGenerationMutation()
@@ -44,6 +45,7 @@ export default function useReportsColumns() {
           className="hover:bg-gray-200 hover:text-gray-800"
           onClick={async () => {
             await retryReportGenerationMutation({ report_id: row.original?.id })
+            sendEvent(ANALYTICS_EVENTS.ADMIN_OCR_ERROR, { report_id: row.original?.id, action: 'retry' })
           }}
         >
           <RotateCw className="mr-2 h-4 w-4" />

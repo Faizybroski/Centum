@@ -24,6 +24,8 @@ import moment from 'moment'
 
 type FormValues = z.infer<typeof schema>
 
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
+
 export default function UploadFilesSection() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([])
@@ -75,6 +77,7 @@ export default function UploadFilesSection() {
         reportDate: moment(data.reportDate).toISOString(),
       }).unwrap()
       setFileIds([...fileIds, ...response.filter((item: any) => item?.id && item?.status === 'ready').map((item: any) => item?.id)])
+      sendEvent(ANALYTICS_EVENTS.DOCUMENT_UPLOADED, { category: data.reportCategory })
       setUploadComplete(true)
       setUploadedFiles((prev) => [...prev, ...response])
       console.log('Upload successful:', response)

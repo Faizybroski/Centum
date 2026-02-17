@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import { faqSchema, TSchema } from './FAQForm.schema'
 import { FAQ_CATEGORIES, isFAQCategory } from '@/constants/faqCategories'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 interface Props {
   open: boolean
@@ -68,6 +69,7 @@ export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Pro
   const handleSubmit = async (data: TSchema) => {
     if (!initialData) {
       await onSubmit({ ...data, status: 'saved' })
+      sendEvent(ANALYTICS_EVENTS.ADMIN_FAQ_PUBLISH, { category: data.category })
       faqForm.reset()
       onClose()
     } else {
@@ -76,6 +78,7 @@ export default function AddFAQForm({ open, initialData, onSubmit, onClose }: Pro
       if (!id) return
 
       await onSubmit({ ...data, status: 'saved' })
+      sendEvent(ANALYTICS_EVENTS.ADMIN_FAQ_PUBLISH, { category: data.category, action: 'update' })
       faqForm.reset()
       onClose()
     }

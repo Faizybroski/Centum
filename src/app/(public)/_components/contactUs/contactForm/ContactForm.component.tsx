@@ -14,6 +14,8 @@ import { contactFormSchema, ContactFormSchema } from './ContactForm.schema'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { useContactUsMutation } from '@/redux/services/contact-us.api'
 
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
+
 export default function ContactForm() {
   const [contactUs, { isLoading }] = useContactUsMutation()
   const form = useForm<ContactFormSchema>({
@@ -31,6 +33,7 @@ export default function ContactForm() {
   const onSubmit = async (data: ContactFormSchema) => {
     try {
       await contactUs(data)
+      sendEvent(ANALYTICS_EVENTS.CONTACT_SUBMIT, { subject: data.subject })
       form.reset()
     } catch (error) {
       console.log(error)
@@ -40,25 +43,22 @@ export default function ContactForm() {
   // const mapUrl =
   //   "https://maps.googleapis.com/maps/api/staticmap?center=Kampung%20Bali,Jakarta&zoom=15&size=600x600&maptype=roadmap&markers=color:0x16AF9D|Kampung%20Bali&key=YOUR_API_KEY";
 
-
   return (
     <section className="py-12 sm:py-16 bg-white max-w-5xl mx-auto my-12 rounded-lg px-16 shadow-[0_0_15px_rgba(0,0,0,0.15)]">
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           {/* Left: Contact Form */}
           <motion.div variants={slideLeftVariant} initial="hidden" whileInView="show" viewport={{ once: true }}>
-            
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Fill The Form</h2>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input id="name" placeholder='Name *' {...field} />
+                        <Input id="name" placeholder="Name *" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -70,20 +70,20 @@ export default function ContactForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input id="email" type="email" placeholder='Email *' {...field} />
+                        <Input id="email" type="email" placeholder="Email *" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                  
+
                 <FormField
                   control={form.control}
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input id="phone" type="text" placeholder='Phone' {...field} />
+                        <Input id="phone" type="text" placeholder="Phone" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -95,7 +95,7 @@ export default function ContactForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input id="subject" placeholder='Subject' maxLength={50} {...field} />
+                        <Input id="subject" placeholder="Subject" maxLength={50} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -118,7 +118,7 @@ export default function ContactForm() {
                 </Button>
               </form>
             </Form>
-            
+
             <div className="space-y-8 mt-6 flex justify-between items-start">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h2>
@@ -163,7 +163,10 @@ export default function ContactForm() {
                 className="w-full h-full object-cover"
               /> */}
 
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d484.4020952270146!2d144.93757835149205!3d-37.814401301941245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d67eab3f541%3A0x5715e1e5c1ff5470!2sLevel%201%2F9%20Star%20Cres%2C%20Docklands%20VIC%203008%2C%20Australia!5e0!3m2!1sen!2s!4v1767817680966!5m2!1sen!2s"  className='h-full w-full'></iframe>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d484.4020952270146!2d144.93757835149205!3d-37.814401301941245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d67eab3f541%3A0x5715e1e5c1ff5470!2sLevel%201%2F9%20Star%20Cres%2C%20Docklands%20VIC%203008%2C%20Australia!5e0!3m2!1sen!2s!4v1767817680966!5m2!1sen!2s"
+                className="h-full w-full"
+              ></iframe>
             </div>
           </motion.div>
         </div>
