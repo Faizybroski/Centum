@@ -11,6 +11,7 @@ import { useLazyGetFormDefinationsQuery, useSaveFormStepMutation } from '@/redux
 import SectionLoading from '@/components/ui/section-loading'
 import FormStepProgress from './formStepProgress/FormStepProgress.component'
 import HeaderLogoBlack from '@/components/centum-logos/HeaderLogoBlack.component'
+import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 import { useRef } from 'react'
 import AssessmentForm from './form/AssessmentForm.component'
@@ -88,7 +89,6 @@ export default function HealthAssessmentForm({ forProfile = false }: { forProfil
         }
       }
       setConsentError('')
-      import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
       // ...
       try {
