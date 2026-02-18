@@ -7,7 +7,7 @@
     "build": "next build",
     "postbuild": "npm run copy-standalone-assets",
     "copy-standalone-assets": "node scripts/copyAssets.mjs",
-    "start": "next start -p $PORT",
+    "start": "next start -p 3000",
     "start:standalone": "node .next/standalone/server.js",
     "deploy": "pm2 startOrRestart ecosystem.config.js",
     "lint": "next lint",

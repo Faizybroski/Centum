@@ -7,7 +7,7 @@ module.exports = {
         script: '.next/standalone/server.js',
         env_production: {
             NODE_ENV: "production",
-            PORT: 8000,
+            PORT: 3000,
           },
         env_development: {
             NODE_ENV: "development",
