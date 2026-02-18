@@ -11,26 +11,26 @@ import BiologicalAgecard from '../_components/biologicalAgecard/BiologicalAgecar
 import ClinicalSummaryCard from '../_components/clinicalSummaryCard/ClinicalSummaryCard.component'
 import DashboardHeader from '@/_layouts/customer/dashboardHeader/DashboardHeader.component'
 import { useGetDashboardDataQuery } from '@/redux/services/dashboard.api'
-import { useExportHealthReport } from '@/hooks'
+// import { useExportHealthReport } from '@/hooks'
 
 export default function DashboardLayout() {
   const { userProfile } = useReduxSelector((state) => state.user)
   const { data: dashboardData, isSuccess } = useGetDashboardDataQuery()
 
-  const { exportReportToPDF, loading } = useExportHealthReport()
+  // const { exportReportToPDF, loading } = useExportHealthReport()
 
   return (
     <div className="p-3 md:py-8 md:px-0">
       <div className="max-w-8xl mx-auto">
         {/* Welcome Header */}
         {/* <DashboardHeader title={`Welcome back, ${userProfile?.full_name || 'Patient'}`} subtitle="Your health insights dashboard" /> */}
-        {isSuccess && dashboardData && (
+        {/* {isSuccess && dashboardData && (
           <div className="flex justify-end">
             <button className="text-primary px-4 py-2 rounded cursor-pointer" disabled={loading} onClick={() => exportReportToPDF(dashboardData)}>
               {loading ? 'Downloading...' : ' Health Report Download'}
             </button>
           </div>
-        )}
+        )} */}
 
         <motion.div className={`grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 mb-6 sm:mb-8`} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, type: 'keyframes', stiffness: 50 }}>
           {/* Biomarkers Card */}

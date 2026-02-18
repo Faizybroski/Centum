@@ -131,9 +131,9 @@ export default function ReportHistoryLayout() {
                       <Button size="icon" variant="ghost">
                         <Eye className="w-4 h-4 text-black" />
                       </Button>
-                      <Button size="icon" variant="ghost">
+                      {/* <Button size="icon" variant="ghost">
                         <Download className="w-4 h-4 text-black" />
-                      </Button>
+                      </Button> */}
                     </TableCell>
                   {/* {Array.from({ length: 5 }).map((_, colIndex) => (
                     <TableCell key={colIndex}>
@@ -183,9 +183,9 @@ export default function ReportHistoryLayout() {
                       <Button size="icon" variant="ghost" onClick={() => navigate(paths.customerReportDetail(report.id))} disabled={isPending}>
                         <Eye className="w-4 h-4 text-black" />
                       </Button>
-                      <Button size="icon" variant="ghost">
+                      {/* <Button size="icon" variant="ghost">
                         <Download className="w-4 h-4 text-black" />
-                      </Button>
+                      </Button> */}
                     </TableCell>
                   </TableRow>
                 ))}
