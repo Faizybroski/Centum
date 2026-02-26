@@ -81,10 +81,7 @@ export default function UploadFilesSection() {
       setUploadComplete(true)
       setUploadedFiles((prev) => [...prev, ...response])
       console.log('Upload successful:', response)
-      reset({
-        ...getValues(),
-        file: undefined,
-      })
+      reset()
       if (fileInputRef.current) fileInputRef.current.value = ''
     } catch (error) {
       console.error('Upload failed:', error)

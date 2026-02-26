@@ -293,9 +293,9 @@ export default function PersonalHealth() {
                   {/* <Line data={attention} type="monotone" dataKey="value" stroke={COLORS.attention} fill={COLORS.attention} strokeWidth={3} dot={{ r: 3 }} connectNulls /> */}
                   <Line type="monotone" dataKey="optimal" stroke={COLORS.optimal} fill={COLORS.optimal} strokeWidth={3} dot={{ r: 3 }} connectNulls />
 
-                  <Line type="monotone" dataKey="average" stroke={COLORS.average}  fill={COLORS.average} strokeWidth={3} dot={{ r: 3 }} connectNulls />
+                  <Line type="monotone" dataKey="average" stroke={COLORS.average} fill={COLORS.average} strokeWidth={3} dot={{ r: 3 }} connectNulls />
 
-                  <Line type="monotone" dataKey="attention" stroke={COLORS.attention}  fill={COLORS.attention} strokeWidth={3} dot={{ r: 3 }} connectNulls />
+                  <Line type="monotone" dataKey="attention" stroke={COLORS.attention} fill={COLORS.attention} strokeWidth={3} dot={{ r: 3 }} connectNulls />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -334,7 +334,7 @@ export default function PersonalHealth() {
           </Card>
         </div>
         <div className="mx-auto mt-10 text-center">
-          <Link href="/">
+          <Link href="/auth/signup">
             <Button size="lg" className="bg-white text-black hover:bg-white/90 text-base sm:text-lg px-6 sm:px-8 py-2 sm:py-3 w-full sm:w-auto hover:scale-105 transition-transform duration-300">
               Start Your Journey <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
