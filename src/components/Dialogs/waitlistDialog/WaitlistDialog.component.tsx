@@ -164,7 +164,7 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} placeholder="you@example.com" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -178,8 +178,9 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Primary health goal</FormLabel>
-                    <Select onValueChange={field.onChange} 
-                    // defaultValue={field.value}
+                    <Select
+                      onValueChange={field.onChange}
+                      // defaultValue={field.value}
                       value={field.value}
                     >
                       <FormControl>
@@ -220,7 +221,28 @@ px-3 py-2 text-sm md:text-base">
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Features you’re excited about (max 3)</FormLabel>
-                    {FEATURE_OPTIONS.map(([value, label]) => (
+                    {FEATURE_OPTIONS.map(([value, label]) => {
+                      const id = `feature-${value}`
+
+                      return (
+                        <div key={value} className="flex items-center gap-2 py-1">
+                          <Checkbox
+                            id={id}
+                            checked={field.value?.includes(value)}
+                            onCheckedChange={(checked) => {
+                              const updated = checked ? [...field.value, value] : field.value.filter((v: string) => v !== value)
+
+                              if (updated.length <= 3) field.onChange(updated)
+                            }}
+                          />
+
+                          <FormLabel htmlFor={id} className="cursor-pointer font-normal">
+                            {label}
+                          </FormLabel>
+                        </div>
+                      )
+                    })}
+                    {/* {FEATURE_OPTIONS.map(([value, label]) => (
                       <div key={value} className="flex items-center gap-2">
                         <Checkbox
                           checked={field.value?.includes(value)}
@@ -230,9 +252,9 @@ px-3 py-2 text-sm md:text-base">
                             if (updated.length <= 3) field.onChange(updated)
                           }}
                         />
-                        <span>{label}</span>
+                        <FormLabel>{label}</FormLabel>
                       </div>
-                    ))}
+                    ))} */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -244,8 +266,9 @@ px-3 py-2 text-sm md:text-base">
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>How much would you be willing to pay per month for a Centum Health membership?</FormLabel>
-                    <Select onValueChange={field.onChange} 
-                    // defaultValue={field.value}
+                    <Select
+                      onValueChange={field.onChange}
+                      // defaultValue={field.value}
                       value={field.value}
                     >
                       <FormControl>
@@ -286,9 +309,10 @@ px-3 py-2 text-sm md:text-base"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>How do you currently track your health data (if at all)?</FormLabel>
-                    <Select onValueChange={field.onChange} 
-                    // defaultValue={field.value}  
-                    value={field.value}
+                    <Select
+                      onValueChange={field.onChange}
+                      // defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
@@ -330,7 +354,7 @@ px-3 py-2 text-sm md:text-base"
                   <FormItem>
                     <FormLabel>Biggest health challenge</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} {...field} />
+                      <Textarea rows={3} className="resize-none" {...field} placeholder="Describe the biggest challenge you face with managing your health..." />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -343,17 +367,20 @@ px-3 py-2 text-sm md:text-base"
                 name="interview_interest"
                 render={({ field }) => (
                   <div className="flex items-center gap-2">
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                    <span>Open to a 15–20 min interview</span>
+                    <Checkbox id={'1'} checked={field.value} onCheckedChange={field.onChange} />
+                    <FormLabel htmlFor={'1'} className='cursor-pointer'>Open to a 15–20 min interview</FormLabel>
                   </div>
                 )}
               />
 
-              <Button type="submit" 
-              disabled={isLoading 
-                // || !form.formState.isValid
-              } 
-              className="w-full">
+              <Button
+                type="submit"
+                disabled={
+                  isLoading
+                  // || !form.formState.isValid
+                }
+                className="w-full"
+              >
                 {isLoading ? 'Submitting…' : 'Submit'}
               </Button>
             </form>
