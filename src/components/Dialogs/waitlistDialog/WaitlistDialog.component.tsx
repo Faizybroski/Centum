@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Mail, X } from 'lucide-react'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
@@ -17,20 +18,26 @@ import { toast } from 'sonner'
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 const waitlistSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
 
-  health_goal: z.enum(['athletic', 'chronic', 'proactive', 'weight', 'sleep', 'other']),
+  health_goal: z.enum(['athletic', 'chronic', 'proactive', 'weight', 'sleep', 'other'], {
+    required_error: 'Please select your primary health goal',
+  }),
 
   features: z
     .array(z.enum(['biomarkers', 'wearables', 'ai_recommendations', 'secure_storage', 'education', 'progress_tracking', 'addon_tests']))
-    .min(1)
-    .max(3),
+    .min(1, { message: 'Select at least one feature' })
+    .max(3, { message: 'You can select up to 3 features only' }),
 
-  pricing_expectation: z.enum(['40_60', '60_80', '80_100', '100_plus', 'not_sure']),
+  pricing_expectation: z.enum(['40_60', '60_80', '80_100', '100_plus', 'not_sure'], {
+    required_error: 'Please select a pricing expectation',
+  }),
 
-  current_tracking: z.enum(['manual', 'wearable', 'apps', 'doctor_only', 'none']),
+  current_tracking: z.enum(['manual', 'wearable', 'apps', 'doctor_only', 'none'], {
+    required_error: 'Please select how you track your health',
+  }),
 
-  biggest_challenge: z.string().min(10),
+  biggest_challenge: z.string().min(10, { message: 'Please describe your challenge in at least 10 characters' }),
 
   interview_interest: z.boolean(),
 })
@@ -70,12 +77,13 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
   // })
   const form = useForm<WaitlistFormData>({
     resolver: zodResolver(waitlistSchema),
+    // mode: 'onChange',
     defaultValues: {
       email: '',
-      health_goal: 'proactive',
+      health_goal: undefined,
       features: [],
-      pricing_expectation: 'not_sure',
-      current_tracking: 'none',
+      pricing_expectation: undefined,
+      current_tracking: undefined,
       biggest_challenge: '',
       interview_interest: false,
     },
@@ -170,14 +178,37 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Primary health goal</FormLabel>
-                    <select {...field} className="w-full border rounded p-2">
-                      <option value="athletic">Optimize athletic performance</option>
-                      <option value="chronic">Manage chronic condition</option>
-                      <option value="proactive">Proactive monitoring</option>
-                      <option value="weight">Weight management</option>
-                      <option value="sleep">Improve energy/sleep</option>
-                      <option value="other">Other</option>
-                    </select>
+                    <Select onValueChange={field.onChange} 
+                    // defaultValue={field.value}
+                      value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select your health goal" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent position="popper">
+                        <SelectItem value="athletic">Optimize athletic performance</SelectItem>
+                        <SelectItem value="chronic">Manage chronic condition</SelectItem>
+                        <SelectItem value="proactive">Proactive monitoring</SelectItem>
+                        <SelectItem value="weight">Weight management</SelectItem>
+                        <SelectItem value="sleep">Improve energy / sleep</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {/* <FormControl>
+                      <select {...field} className="w-full rounded-md border border-gray-300 
+px-3 py-2 text-sm md:text-base">
+                        <option value="athletic">Optimize athletic performance</option>
+                        <option value="chronic">Manage chronic condition</option>
+                        <option value="proactive">Proactive monitoring</option>
+                        <option value="weight">Weight management</option>
+                        <option value="sleep">Improve energy/sleep</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </FormControl> */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -195,12 +226,14 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                           checked={field.value?.includes(value)}
                           onCheckedChange={(checked) => {
                             const updated = checked ? [...field.value, value] : field.value.filter((v: string) => v !== value)
-                            field.onChange(updated)
+                            // field.onChange(updated)
+                            if (updated.length <= 3) field.onChange(updated)
                           }}
                         />
                         <span>{label}</span>
                       </div>
                     ))}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -211,13 +244,38 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>How much would you be willing to pay per month for a Centum Health membership?</FormLabel>
-                    <select {...field} className="w-full border rounded p-2">
-                      <option value="40_60">$40 - $60</option>
-                      <option value="60_80">$60 - $80</option>
-                      <option value="80_100">$80 - $100</option>
-                      <option value="100_plus">More than $100</option>
-                      <option value="not_sure">Not sure yet</option>
-                    </select>
+                    <Select onValueChange={field.onChange} 
+                    // defaultValue={field.value}
+                      value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select pricing range" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent position="popper">
+                        <SelectItem value="40_60">$40 – $60</SelectItem>
+                        <SelectItem value="60_80">$60 – $80</SelectItem>
+                        <SelectItem value="80_100">$80 – $100</SelectItem>
+                        <SelectItem value="100_plus">More than $100</SelectItem>
+                        <SelectItem value="not_sure">Not sure yet</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {/* <FormControl>
+                      <select
+                        {...field}
+                        className="w-full rounded-md border border-gray-300 
+px-3 py-2 text-sm md:text-base"
+                      >
+                        <option value="40_60">$40 - $60</option>
+                        <option value="60_80">$60 - $80</option>
+                        <option value="80_100">$80 - $100</option>
+                        <option value="100_plus">More than $100</option>
+                        <option value="not_sure">Not sure yet</option>
+                      </select>
+                    </FormControl> */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -228,13 +286,38 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>How do you currently track your health data (if at all)?</FormLabel>
-                    <select {...field} className="w-full border rounded p-2">
-                      <option value="manually">Manually (journal/spreadsheet)</option>
-                      <option value="wearable">Wearable device (e.g., Oura, Apple Watch, Fitbit)</option>
-                      <option value="apps">Other health apps (e.g., MyFitnessPal)</option>
-                      <option value="doctor_only">Doctor's visits/lab tests only</option>
-                      <option value="none">Not currently tracking</option>
-                    </select>
+                    <Select onValueChange={field.onChange} 
+                    // defaultValue={field.value}  
+                    value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select tracking method" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent position="popper">
+                        <SelectItem value="manual">Manual tracking</SelectItem>
+                        <SelectItem value="wearable">Wearable device</SelectItem>
+                        <SelectItem value="apps">Health apps</SelectItem>
+                        <SelectItem value="doctor_only">Doctor visits / labs</SelectItem>
+                        <SelectItem value="none">Not tracking</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {/* <FormControl>
+                      <select
+                        {...field}
+                        className="w-full rounded-md border border-gray-300 
+px-3 py-2 text-sm md:text-base"
+                      >
+                        <option value="manual">Manually (journal/spreadsheet)</option>
+                        <option value="wearable">Wearable device (e.g., Oura, Apple Watch, Fitbit)</option>
+                        <option value="apps">Other health apps (e.g., MyFitnessPal)</option>
+                        <option value="doctor_only">Doctor's visits/lab tests only</option>
+                        <option value="none">Not currently tracking</option>
+                      </select>
+                    </FormControl> */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -249,6 +332,7 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                     <FormControl>
                       <Textarea rows={3} {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -265,7 +349,11 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
                 )}
               />
 
-              <Button type="submit" disabled={isLoading} className="w-full">
+              <Button type="submit" 
+              disabled={isLoading 
+                // || !form.formState.isValid
+              } 
+              className="w-full">
                 {isLoading ? 'Submitting…' : 'Submit'}
               </Button>
             </form>
