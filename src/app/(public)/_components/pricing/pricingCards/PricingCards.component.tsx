@@ -87,30 +87,35 @@ export default function PricingCards() {
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start divide-y md:divide-y-0 md:divide-x-0 ">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start divide-y md:divide-y-0 md:divide-x-0 "> */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start divide-y md:divide-y-0 md:divide-x-0 ">
+
           {pricingTiers.map((tier, index) => (
             <div
               key={tier.name}
-              className={`relative group bg-white hover:rounded-2xl hover:shadow-lg hover:border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit ${
-                tier.isPopular ? 'hover:border-primary bg-primary/5' : 'hover:border-[#0B3029]/50'
-              }`}
+              className={`relative group bg-white rounded-2xl hover:shadow-lg hover:border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit hover:border-primary bg-primary/5`}
             >
               {/* Popular Badge */}
-              {tier.isPopular && (
+              {/* {tier.isPopular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <div className="bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] text-white px-4 py-1 rounded-full text-sm font-semibold animate-bounce">Most Popular</div>
                 </div>
-              )}
+              )} */}
 
               <div className="p-8 ">
                 {/* Tier Name */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3>
+                {/* <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3> */}
+
+                <h3 className="text-3xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3>
+
 
                 {/* Pricing */}
-                <div className="text-center mb-6">
+                {/* For adjustment of divs height */}
+                <div className='h-[1rem]'/>
+                {/* <div className="text-center mb-6">
                   <div className="text-3xl font-bold text-gray-900 mb-1">{tier.price.monthly}</div>
                   <div className="text-lg text-gray-600">or {tier.price.yearly}</div>
-                </div>
+                </div> */}
 
                 {/* Features */}
                 <div className="space-y-4 mb-8">
