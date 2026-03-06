@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import Confetti from 'react-confetti'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -66,6 +67,10 @@ interface WaitlistDialogProps {
 import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitlist', buttonClassName, subscriptionType }: WaitlistDialogProps) {
+  const [successData, setSuccessData] = useState<{
+    message: string
+    count: number
+  } | null>(null)
   const [open, setOpen] = useState(false)
   const [joinWaitlist, { isLoading }] = useJoinWaitlistMutation()
 
@@ -94,15 +99,21 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
     try {
       // await joinWaitlist({ email: data.email, subscription_type: subscriptionType || '' })
 
-      await joinWaitlist({
+      // await joinWaitlist({
+      //   ...values,
+      //   subscription_type: subscriptionType,
+      // }).unwrap()
+
+      const res = await joinWaitlist({
         ...values,
         subscription_type: subscriptionType,
       }).unwrap()
 
       sendEvent(ANALYTICS_EVENTS.WAITLIST_FORM_COMPLETE, { plan: planName, subscription_type: subscriptionType })
-      toast.success('You’re on the waitlist 🎉')
+      // toast.success('You’re on the waitlist 🎉')
       form.reset()
       setOpen(false)
+      setSuccessData(res)
     } catch (error: any) {
       console.error('Error joining waitlist:', error)
 
@@ -117,7 +128,71 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
     }
   }
 
+  // if (open) {
+  //   return (
+  //     <Dialog open={!!successData} onOpenChange={() => setSuccessData(null)}>
+  //       <DialogContent className="sm:max-w-md text-center space-y-6">
+  //         {/* Success Icon */}
+  //         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+  //           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white text-xl">✓</div>
+  //         </div>
+
+  //         {/* Heading */}
+  //         <h2 className="text-2xl font-semibold">You're on the waitlist! 🎉</h2>
+
+  //         {/* Message */}
+  //         <p className="text-gray-600">
+  //           Thanks for joining the <span className='text-primary'>{subscriptionType}</span> waitlist.
+  //           <br />
+  //           You are <span className="font-semibold text-primary">#{successData?.count}</span> in line.
+  //         </p>
+
+  //         <p className="text-gray-500 text-sm">You'll be among the first to know when we make our exciting public launch!</p>
+
+  //         {/* CTA */}
+  //         <Button className="w-full mt-4" onClick={() => setSuccessData(null)}>
+  //           Got it
+  //         </Button>
+  //       </DialogContent>
+  //     </Dialog>
+  //   )
+  // }
+
   return (
+    <>
+  {/* SUCCESS DIALOG */}
+  <Dialog open={!!successData} onOpenChange={() => setSuccessData(null)}>
+    <DialogContent className="sm:max-w-md text-center space-y-6">
+      {successData && <Confetti recycle={false} numberOfPieces={300} />}
+
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-xl">
+          ✓
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-semibold">
+        You're on the waitlist! 🎉
+      </h2>
+
+      <p className="text-gray-600">
+        Thanks for joining the <span className="text-primary font-semibold">{subscriptionType}</span> waitlist.
+        <br />
+        You are <span className="font-semibold text-primary">#{successData?.count}</span> in line.
+      </p>
+
+      <p className="text-gray-500 text-sm">
+        You'll be among the first to know when we make our exciting public launch!
+      </p>
+
+      <Button className="w-full mt-4" onClick={() => setSuccessData(null)}>
+        Got it
+      </Button>
+
+    </DialogContent>
+  </Dialog>
+
+
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className={buttonClassName}>{buttonText}</Button>
@@ -368,7 +443,9 @@ px-3 py-2 text-sm md:text-base"
                 render={({ field }) => (
                   <div className="flex items-center gap-2">
                     <Checkbox id={'1'} checked={field.value} onCheckedChange={field.onChange} />
-                    <FormLabel htmlFor={'1'} className='cursor-pointer'>Open to a 15–20 min interview</FormLabel>
+                    <FormLabel htmlFor={'1'} className="cursor-pointer">
+                      Open to a 15–20 min interview
+                    </FormLabel>
                   </div>
                 )}
               />
@@ -388,5 +465,6 @@ px-3 py-2 text-sm md:text-base"
         </div>
       </DialogContent>
     </Dialog>
+    </>
   )
 }

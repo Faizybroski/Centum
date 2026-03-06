@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import { containerVariants, fadeUpVariant, fadeInBadge } from '@/utils/animation.util'
 import WaitlistDialog from '@/components/Dialogs/waitlistDialog/WaitlistDialog.component'
+import { useGetWaitlistCountsQuery } from '@/redux/services/contact-us.api'
 
 interface PricingTier {
   name: string
@@ -84,86 +85,135 @@ const pricingTiers: PricingTier[] = [
 // Using predefined animations from utils
 
 export default function PricingCards() {
+  const { data } = useGetWaitlistCountsQuery()
+  const [expandedTier, setExpandedTier] = useState<boolean | null>(false)
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start divide-y md:divide-y-0 md:divide-x-0 "> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start divide-y md:divide-y-0 md:divide-x-0 ">
+          {pricingTiers.map((tier, index) => {
+            const isExpanded = true
+            const maxFeatures = 7
 
-          {pricingTiers.map((tier, index) => (
-            <div
-              key={tier.name}
-              className={`relative group bg-white rounded-2xl hover:shadow-lg hover:border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit hover:border-primary bg-primary/5`}
-            >
-              {/* Popular Badge */}
-              {/* {tier.isPopular && (
+            const allFeatures = [tier.biomarkers, `Mid-Year Re-Tests: ${tier.reTests}`, ...tier.features, `Add-On Test Discount: ${tier.addOnDiscount}`, `Telehealth Consults: ${tier.telehealthConsults}`, tier.support]
+
+            const visibleFeatures = isExpanded ? allFeatures : allFeatures.slice(0, maxFeatures)
+            const count = data?.counts?.[tier.name.toLowerCase()] ?? 0
+            return (
+  //             <div
+  //               key={tier.name}
+  //               className="relative group bg-white rounded-2xl border border-gray-200
+  // hover:border-primary hover:shadow-xl transition-all duration-300
+  // flex flex-col h-full hover:-translate-y-1"
+  //             >
+  //               <div className="p-8 flex flex-col h-full">
+  //                 <h3 className="text-2xl font-semibold text-gray-900 text-center mb-6">{tier.name}</h3>
+
+  //                 <div className="flex flex-col flex-grow">
+  //                   <div className="space-y-3 mb-6">
+  //                     {visibleFeatures.map((feature, i) => (
+  //                       <div key={i} className="flex items-start">
+  //                         <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0 mt-[2px]" />
+  //                         <span className="text-gray-600">{feature}</span>
+  //                       </div>
+  //                     ))}
+  //                   </div>
+
+  //                   {allFeatures.length > maxFeatures && (
+  //                     <button onClick={() => setExpandedTier(isExpanded ? false : true)} className="text-primary text-sm font-medium hover:underline">
+  //                       {isExpanded ? 'See less' : `See ${allFeatures.length - maxFeatures} more`}
+  //                     </button>
+  //                   )}
+  //                 </div>
+
+  //                 <div className="mt-auto pt-6">
+  //                   {count > 0 && (
+  //                     <div className="flex justify-center mb-4">
+  //                       <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">{count} people joined the waitlist</span>
+  //                     </div>
+  //                   )}
+
+  //                   <WaitlistDialog planName={tier.name} buttonText={tier.buttonText} subscriptionType={tier.name.toLowerCase()} buttonClassName="w-full py-3 text-base font-semibold" />
+  //                 </div>
+  //               </div>
+  //             </div>
+              <div key={tier.name} className={`relative group bg-white rounded-2xl hover:shadow-lg hover:border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit hover:border-primary bg-primary/5`}>
+                {/* Popular Badge */}
+                {/* {tier.isPopular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <div className="bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] text-white px-4 py-1 rounded-full text-sm font-semibold animate-bounce">Most Popular</div>
                 </div>
               )} */}
 
-              <div className="p-8 ">
-                {/* Tier Name */}
-                {/* <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3> */}
+                <div className="p-8 ">
+                  {/* Tier Name */}
+                  {/* <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3> */}
 
-                <h3 className="text-3xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4 text-center group-hover:text-[#16AF9D] transition-all duration-300">{tier.name}</h3>
+                  <div className="h-[1rem]" />
 
-
-                {/* Pricing */}
-                {/* For adjustment of divs height */}
-                <div className='h-[1rem]'/>
-                {/* <div className="text-center mb-6">
+                  {/* Pricing */}
+                  {/* For adjustment of divs height */}
+                  {/* <div className="text-center mb-6">
                   <div className="text-3xl font-bold text-gray-900 mb-1">{tier.price.monthly}</div>
                   <div className="text-lg text-gray-600">or {tier.price.yearly}</div>
                 </div> */}
 
-                {/* Features */}
-                <div className="space-y-4 mb-8">
-                  {/* Key Features */}
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{tier.biomarkers}</span>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">Mid-Year Re-Tests: {tier.reTests}</span>
-                  </div>
-
-                  {/* Additional Features */}
-                  {tier.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-center">
+                  {/* Features */}
+                  <div className="space-y-4 mb-8">
+                    {/* Key Features */}
+                    <div className="flex items-center">
                       <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-700">{tier.biomarkers}</span>
                     </div>
-                  ))}
 
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">Add-On Test Discount: {tier.addOnDiscount}</span>
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">Mid-Year Re-Tests: {tier.reTests}</span>
+                    </div>
+
+                    {/* Additional Features */}
+                    {tier.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center">
+                        <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">Add-On Test Discount: {tier.addOnDiscount}</span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">Telehealth Consults: {tier.telehealthConsults}</span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">{tier.support}</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">Telehealth Consults: {tier.telehealthConsults}</span>
-                  </div>
+                  {count > 0 && (
+                    <div className="flex justify-center mb-6">
+                      <div className="inline-flex items-center gap-2  text-primary text-xs font-medium px-3 py-1 ">{count} people already joined the waitlist</div>
+                    </div>
+                  )}
 
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{tier.support}</span>
-                  </div>
+                  {/* CTA Button */}
+                  <WaitlistDialog
+                    planName={tier.name}
+                    buttonText={tier.buttonText}
+                    subscriptionType={tier.name.toLowerCase()}
+                    buttonClassName={`w-full py-3 text-base font-semibold transition-all duration-300 hover:scale-105 ${tier.isPopular ? 'bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-primary/90 text-white' : 'bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-gray-800 text-white'}`}
+                  />
                 </div>
-
-                {/* CTA Button */}
-                <WaitlistDialog
-                  planName={tier.name}
-                  buttonText={tier.buttonText}
-                  subscriptionType={tier.name.toLowerCase()}
-                  buttonClassName={`w-full py-3 text-base font-semibold transition-all duration-300 hover:scale-105 ${tier.isPopular ? 'bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-primary/90 text-white' : 'bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-gray-800 text-white'}`}
-                />
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>
