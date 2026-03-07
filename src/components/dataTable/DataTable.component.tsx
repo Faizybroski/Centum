@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, SortingState, useReactTable } from '@tanstack/react-table'
+import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, SortingState, useReactTable, RowSelectionState } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import NoRecordsFound from '../noRecordsFound/NoRecordFound.component'
@@ -18,20 +18,50 @@ interface DataTableProps<TData, TValue> {
   setPage?: (page: number) => void
   totalPages?: number
   isPaginationEnabled?: boolean
+  onSelectionChange?: (ids: string[]) => void
 }
 
-export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPages, onRowClick, isPaginationEnabled = true }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, page, setPage, totalPages, onRowClick, isPaginationEnabled = true, onSelectionChange }: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
   const table = useReactTable({
     data,
     columns,
+    state: {
+      rowSelection,
+    },
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
     pageCount: totalPages,
-    getRowId: (row: any) => row._id,
+    // getRowId: (row: any) => row._id,
+    getRowId: (row: any) => row.id,
+    // getRowId: (row: FailedReportDTO) => row.id
   })
 
-  console.log(data)
+  const selectedRows = table.getSelectedRowModel().rows
+  // const selectedIds = selectedRows.map((row) => row.original._id)
+  const selectedIds = selectedRows.map((row) => (row.original as any).id)
+
+  React.useEffect(() => {
+    const ids = table.getSelectedRowModel().rows.map((row) => (row.original as any).id)
+
+    onSelectionChange?.(ids)
+  }, [rowSelection, table, onSelectionChange])
+
+  // const table = useReactTable({
+  //   data,
+  //   columns,
+  //   getCoreRowModel: getCoreRowModel(),
+  //   getPaginationRowModel: getPaginationRowModel(),
+  //   manualPagination: true,
+  //   pageCount: totalPages,
+  //   getRowId: (row: any) => row._id,
+  // })
+
+  // console.log(data)
+  console.log('selectedIds', selectedIds)
 
   return (
     <>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from "@/components/ui/checkbox"
 import { FailedReportDTO } from '@/dto'
 import { useRetryReportGenerationMutation } from '@/redux/services/admin/reports.api'
 import { StatusBadge } from '@/components/statusBadge/StatusBadge.component'
@@ -11,6 +12,26 @@ export default function useReportsColumns() {
   const [retryReportGenerationMutation, { isLoading }] = useRetryReportGenerationMutation()
 
   const [columns, _] = React.useState<ColumnDef<FailedReportDTO>[]>([
+    {
+  id: "select",
+  header: ({ table }) => (
+    <Checkbox
+      checked={table.getIsAllPageRowsSelected()}
+      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      aria-label="Select all"
+    />
+  ),
+  cell: ({ row }) => (
+  <Checkbox
+    checked={row.getIsSelected()}
+    onCheckedChange={(value) => row.toggleSelected(!!value)}
+    onClick={(e) => e.stopPropagation()}
+    aria-label="Select row"
+  />
+),
+  enableSorting: false,
+  enableHiding: false,
+},
     {
       accessorKey: 'report_title',
       header: 'Report Title',
