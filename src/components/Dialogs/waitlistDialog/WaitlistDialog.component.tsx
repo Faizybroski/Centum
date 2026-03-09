@@ -62,11 +62,12 @@ interface WaitlistDialogProps {
   buttonText?: string
   buttonClassName?: string
   subscriptionType?: string
+  onSuccess?: (tier: string, count: number) => void
 }
 
 import { sendEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
-export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitlist', buttonClassName, subscriptionType }: WaitlistDialogProps) {
+export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitlist', buttonClassName, subscriptionType, onSuccess }: WaitlistDialogProps) {
   const [successData, setSuccessData] = useState<{
     message: string
     count: number
@@ -160,56 +161,56 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
 
   return (
     <>
-  {/* SUCCESS DIALOG */}
-  <Dialog open={!!successData} onOpenChange={() => setSuccessData(null)}>
-    <DialogContent className="sm:max-w-md text-center space-y-6">
-      {successData && <Confetti recycle={false} numberOfPieces={300} />}
+      {/* SUCCESS DIALOG */}
+      <Dialog open={!!successData} onOpenChange={() => setSuccessData(null)}>
+        <DialogContent className="sm:max-w-md text-center space-y-6">
+          {successData && <Confetti recycle={false} numberOfPieces={300} />}
 
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-xl">
-          ✓
-        </div>
-      </div>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-xl">✓</div>
+          </div>
 
-      <h2 className="text-2xl font-semibold">
-        You're on the waitlist! 🎉
-      </h2>
+          <h2 className="text-2xl font-semibold">You're on the waitlist! 🎉</h2>
 
-      <p className="text-gray-600">
-        Thanks for joining the <span className="text-primary font-semibold">{subscriptionType}</span> waitlist.
-        <br />
-        You are <span className="font-semibold text-primary">#{successData?.count}</span> in line.
-      </p>
+          <p className="text-gray-600">
+            Thanks for joining the <span className="text-primary font-semibold">{subscriptionType}</span> waitlist.
+            <br />
+            You are <span className="font-semibold text-primary">#{successData?.count}</span> in line.
+          </p>
 
-      <p className="text-gray-500 text-sm">
-        You'll be among the first to know when we make our exciting public launch!
-      </p>
+          <p className="text-gray-500 text-sm">You'll be among the first to know when we make our exciting public launch!</p>
 
-      <Button className="w-full mt-4" onClick={() => setSuccessData(null)}>
-        Got it
-      </Button>
+          <Button
+            className={buttonClassName}
+            onClick={() => {
+              if (successData && onSuccess) {
+                onSuccess(subscriptionType!, successData.count)
+              }
+              setSuccessData(null)
+            }}
+          >
+            Got it
+          </Button>
+        </DialogContent>
+      </Dialog>
 
-    </DialogContent>
-  </Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button className={buttonClassName}>{buttonText}</Button>
+        </DialogTrigger>
 
-
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className={buttonClassName}>{buttonText}</Button>
-      </DialogTrigger>
-
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <div className="space-y-4">
-          {/* <div className="text-center">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <div className="space-y-4">
+            {/* <div className="text-center">
             <h5 className="text-lg font-semibold mb-2">Join {planName} Waitlist</h5>
             <p className="text-sm text-gray-600"></p>
           </div> */}
-          <DialogHeader>
-            <DialogTitle className="text-lg font-semibold mb-2">Join {planName} Waitlist</DialogTitle>
-            <DialogDescription className="text-sm text-gray-600">Be the first to know when this plan becomes available</DialogDescription>
-          </DialogHeader>
+            <DialogHeader>
+              <DialogTitle className="text-lg font-semibold mb-2">Join {planName} Waitlist</DialogTitle>
+              <DialogDescription className="text-sm text-gray-600">Be the first to know when this plan becomes available</DialogDescription>
+            </DialogHeader>
 
-          {/* <Form {...form}>
+            {/* <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
@@ -229,51 +230,51 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
               </Button>
             </form>
           </Form> */}
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="you@example.com" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Health Goal */}
-              <FormField
-                control={form.control}
-                name="health_goal"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Primary health goal</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      // defaultValue={field.value}
-                      value={field.value}
-                    >
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select your health goal" />
-                        </SelectTrigger>
+                        <Input {...field} placeholder="you@example.com" />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                      <SelectContent position="popper">
-                        <SelectItem value="athletic">Optimize athletic performance</SelectItem>
-                        <SelectItem value="chronic">Manage chronic condition</SelectItem>
-                        <SelectItem value="proactive">Proactive monitoring</SelectItem>
-                        <SelectItem value="weight">Weight management</SelectItem>
-                        <SelectItem value="sleep">Improve energy / sleep</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {/* <FormControl>
+                {/* Health Goal */}
+                <FormField
+                  control={form.control}
+                  name="health_goal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Primary health goal</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        // defaultValue={field.value}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select your health goal" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent position="popper">
+                          <SelectItem value="athletic">Optimize athletic performance</SelectItem>
+                          <SelectItem value="chronic">Manage chronic condition</SelectItem>
+                          <SelectItem value="proactive">Proactive monitoring</SelectItem>
+                          <SelectItem value="weight">Weight management</SelectItem>
+                          <SelectItem value="sleep">Improve energy / sleep</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {/* <FormControl>
                       <select {...field} className="w-full rounded-md border border-gray-300 
 px-3 py-2 text-sm md:text-base">
                         <option value="athletic">Optimize athletic performance</option>
@@ -284,40 +285,40 @@ px-3 py-2 text-sm md:text-base">
                         <option value="other">Other</option>
                       </select>
                     </FormControl> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Features (multi-select) */}
-              <FormField
-                control={form.control}
-                name="features"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Features you’re excited about (max 3)</FormLabel>
-                    {FEATURE_OPTIONS.map(([value, label]) => {
-                      const id = `feature-${value}`
+                {/* Features (multi-select) */}
+                <FormField
+                  control={form.control}
+                  name="features"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Features you’re excited about (max 3)</FormLabel>
+                      {FEATURE_OPTIONS.map(([value, label]) => {
+                        const id = `feature-${value}`
 
-                      return (
-                        <div key={value} className="flex items-center gap-2 py-1">
-                          <Checkbox
-                            id={id}
-                            checked={field.value?.includes(value)}
-                            onCheckedChange={(checked) => {
-                              const updated = checked ? [...field.value, value] : field.value.filter((v: string) => v !== value)
+                        return (
+                          <div key={value} className="flex items-center gap-2 py-1">
+                            <Checkbox
+                              id={id}
+                              checked={field.value?.includes(value)}
+                              onCheckedChange={(checked) => {
+                                const updated = checked ? [...field.value, value] : field.value.filter((v: string) => v !== value)
 
-                              if (updated.length <= 3) field.onChange(updated)
-                            }}
-                          />
+                                if (updated.length <= 3) field.onChange(updated)
+                              }}
+                            />
 
-                          <FormLabel htmlFor={id} className="cursor-pointer font-normal">
-                            {label}
-                          </FormLabel>
-                        </div>
-                      )
-                    })}
-                    {/* {FEATURE_OPTIONS.map(([value, label]) => (
+                            <FormLabel htmlFor={id} className="cursor-pointer font-normal">
+                              {label}
+                            </FormLabel>
+                          </div>
+                        )
+                      })}
+                      {/* {FEATURE_OPTIONS.map(([value, label]) => (
                       <div key={value} className="flex items-center gap-2">
                         <Checkbox
                           checked={field.value?.includes(value)}
@@ -330,37 +331,37 @@ px-3 py-2 text-sm md:text-base">
                         <FormLabel>{label}</FormLabel>
                       </div>
                     ))} */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="pricing_expectation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>How much would you be willing to pay per month for a Centum Health membership?</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      // defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select pricing range" />
-                        </SelectTrigger>
-                      </FormControl>
+                <FormField
+                  control={form.control}
+                  name="pricing_expectation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>How much would you be willing to pay per month for a Centum Health membership?</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        // defaultValue={field.value}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select pricing range" />
+                          </SelectTrigger>
+                        </FormControl>
 
-                      <SelectContent position="popper">
-                        <SelectItem value="40_60">$40 – $60</SelectItem>
-                        <SelectItem value="60_80">$60 – $80</SelectItem>
-                        <SelectItem value="80_100">$80 – $100</SelectItem>
-                        <SelectItem value="100_plus">More than $100</SelectItem>
-                        <SelectItem value="not_sure">Not sure yet</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {/* <FormControl>
+                        <SelectContent position="popper">
+                          <SelectItem value="40_60">$40 – $60</SelectItem>
+                          <SelectItem value="60_80">$60 – $80</SelectItem>
+                          <SelectItem value="80_100">$80 – $100</SelectItem>
+                          <SelectItem value="100_plus">More than $100</SelectItem>
+                          <SelectItem value="not_sure">Not sure yet</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {/* <FormControl>
                       <select
                         {...field}
                         className="w-full rounded-md border border-gray-300 
@@ -373,37 +374,37 @@ px-3 py-2 text-sm md:text-base"
                         <option value="not_sure">Not sure yet</option>
                       </select>
                     </FormControl> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="current_tracking"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>How do you currently track your health data (if at all)?</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      // defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select tracking method" />
-                        </SelectTrigger>
-                      </FormControl>
+                <FormField
+                  control={form.control}
+                  name="current_tracking"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>How do you currently track your health data (if at all)?</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        // defaultValue={field.value}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select tracking method" />
+                          </SelectTrigger>
+                        </FormControl>
 
-                      <SelectContent position="popper">
-                        <SelectItem value="manual">Manual tracking</SelectItem>
-                        <SelectItem value="wearable">Wearable device</SelectItem>
-                        <SelectItem value="apps">Health apps</SelectItem>
-                        <SelectItem value="doctor_only">Doctor visits / labs</SelectItem>
-                        <SelectItem value="none">Not tracking</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {/* <FormControl>
+                        <SelectContent position="popper">
+                          <SelectItem value="manual">Manual tracking</SelectItem>
+                          <SelectItem value="wearable">Wearable device</SelectItem>
+                          <SelectItem value="apps">Health apps</SelectItem>
+                          <SelectItem value="doctor_only">Doctor visits / labs</SelectItem>
+                          <SelectItem value="none">Not tracking</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {/* <FormControl>
                       <select
                         {...field}
                         className="w-full rounded-md border border-gray-300 
@@ -416,55 +417,55 @@ px-3 py-2 text-sm md:text-base"
                         <option value="none">Not currently tracking</option>
                       </select>
                     </FormControl> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Biggest challenge */}
-              <FormField
-                control={form.control}
-                name="biggest_challenge"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Biggest health challenge</FormLabel>
-                    <FormControl>
-                      <Textarea rows={3} className="resize-none" {...field} placeholder="Describe the biggest challenge you face with managing your health..." />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                {/* Biggest challenge */}
+                <FormField
+                  control={form.control}
+                  name="biggest_challenge"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Biggest health challenge</FormLabel>
+                      <FormControl>
+                        <Textarea rows={3} className="resize-none" {...field} placeholder="Describe the biggest challenge you face with managing your health..." />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Interview */}
-              <FormField
-                control={form.control}
-                name="interview_interest"
-                render={({ field }) => (
-                  <div className="flex items-center gap-2">
-                    <Checkbox id={'1'} checked={field.value} onCheckedChange={field.onChange} />
-                    <FormLabel htmlFor={'1'} className="cursor-pointer">
-                      Open to a 15–20 min interview
-                    </FormLabel>
-                  </div>
-                )}
-              />
+                {/* Interview */}
+                <FormField
+                  control={form.control}
+                  name="interview_interest"
+                  render={({ field }) => (
+                    <div className="flex items-center gap-2">
+                      <Checkbox id={'1'} checked={field.value} onCheckedChange={field.onChange} />
+                      <FormLabel htmlFor={'1'} className="cursor-pointer">
+                        Open to a 15–20 min interview
+                      </FormLabel>
+                    </div>
+                  )}
+                />
 
-              <Button
-                type="submit"
-                disabled={
-                  isLoading
-                  // || !form.formState.isValid
-                }
-                className="w-full"
-              >
-                {isLoading ? 'Submitting…' : 'Submit'}
-              </Button>
-            </form>
-          </Form>
-        </div>
-      </DialogContent>
-    </Dialog>
+                <Button
+                  type="submit"
+                  disabled={
+                    isLoading
+                    // || !form.formState.isValid
+                  }
+                  className={buttonClassName}
+                >
+                  {isLoading ? 'Submitting…' : 'Submit'}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

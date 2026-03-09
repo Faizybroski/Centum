@@ -85,8 +85,17 @@ const pricingTiers: PricingTier[] = [
 // Using predefined animations from utils
 
 export default function PricingCards() {
-  const { data } = useGetWaitlistCountsQuery()
+  const { data, isLoading } = useGetWaitlistCountsQuery()
+  const [localCounts, setLocalCounts] = useState<Record<string, number>>({})
   const [expandedTier, setExpandedTier] = useState<boolean | null>(false)
+
+  const handleWaitlistSuccess = (tier: string, count: number) => {
+  setLocalCounts((prev) => ({
+    ...prev,
+    [tier]: count,
+  }))
+}
+
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,45 +108,52 @@ export default function PricingCards() {
             const allFeatures = [tier.biomarkers, `Mid-Year Re-Tests: ${tier.reTests}`, ...tier.features, `Add-On Test Discount: ${tier.addOnDiscount}`, `Telehealth Consults: ${tier.telehealthConsults}`, tier.support]
 
             const visibleFeatures = isExpanded ? allFeatures : allFeatures.slice(0, maxFeatures)
-            const count = data?.counts?.[tier.name.toLowerCase()] ?? 0
+            // const count = data?.counts?.[tier.name.toLowerCase()] ?? 0
+            // const count = data?.counts?.[tier.name.toLowerCase()]
+            const tierKey = tier.name.toLowerCase()
+
+const count =
+  localCounts[tierKey] ??
+  data?.counts?.[tierKey]
+
             return (
-  //             <div
-  //               key={tier.name}
-  //               className="relative group bg-white rounded-2xl border border-gray-200
-  // hover:border-primary hover:shadow-xl transition-all duration-300
-  // flex flex-col h-full hover:-translate-y-1"
-  //             >
-  //               <div className="p-8 flex flex-col h-full">
-  //                 <h3 className="text-2xl font-semibold text-gray-900 text-center mb-6">{tier.name}</h3>
+              //             <div
+              //               key={tier.name}
+              //               className="relative group bg-white rounded-2xl border border-gray-200
+              // hover:border-primary hover:shadow-xl transition-all duration-300
+              // flex flex-col h-full hover:-translate-y-1"
+              //             >
+              //               <div className="p-8 flex flex-col h-full">
+              //                 <h3 className="text-2xl font-semibold text-gray-900 text-center mb-6">{tier.name}</h3>
 
-  //                 <div className="flex flex-col flex-grow">
-  //                   <div className="space-y-3 mb-6">
-  //                     {visibleFeatures.map((feature, i) => (
-  //                       <div key={i} className="flex items-start">
-  //                         <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0 mt-[2px]" />
-  //                         <span className="text-gray-600">{feature}</span>
-  //                       </div>
-  //                     ))}
-  //                   </div>
+              //                 <div className="flex flex-col flex-grow">
+              //                   <div className="space-y-3 mb-6">
+              //                     {visibleFeatures.map((feature, i) => (
+              //                       <div key={i} className="flex items-start">
+              //                         <Check className="h-5 w-5 text-primary mr-3 flex-shrink-0 mt-[2px]" />
+              //                         <span className="text-gray-600">{feature}</span>
+              //                       </div>
+              //                     ))}
+              //                   </div>
 
-  //                   {allFeatures.length > maxFeatures && (
-  //                     <button onClick={() => setExpandedTier(isExpanded ? false : true)} className="text-primary text-sm font-medium hover:underline">
-  //                       {isExpanded ? 'See less' : `See ${allFeatures.length - maxFeatures} more`}
-  //                     </button>
-  //                   )}
-  //                 </div>
+              //                   {allFeatures.length > maxFeatures && (
+              //                     <button onClick={() => setExpandedTier(isExpanded ? false : true)} className="text-primary text-sm font-medium hover:underline">
+              //                       {isExpanded ? 'See less' : `See ${allFeatures.length - maxFeatures} more`}
+              //                     </button>
+              //                   )}
+              //                 </div>
 
-  //                 <div className="mt-auto pt-6">
-  //                   {count > 0 && (
-  //                     <div className="flex justify-center mb-4">
-  //                       <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">{count} people joined the waitlist</span>
-  //                     </div>
-  //                   )}
+              //                 <div className="mt-auto pt-6">
+              //                   {count > 0 && (
+              //                     <div className="flex justify-center mb-4">
+              //                       <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">{count} people joined the waitlist</span>
+              //                     </div>
+              //                   )}
 
-  //                   <WaitlistDialog planName={tier.name} buttonText={tier.buttonText} subscriptionType={tier.name.toLowerCase()} buttonClassName="w-full py-3 text-base font-semibold" />
-  //                 </div>
-  //               </div>
-  //             </div>
+              //                   <WaitlistDialog planName={tier.name} buttonText={tier.buttonText} subscriptionType={tier.name.toLowerCase()} buttonClassName="w-full py-3 text-base font-semibold" />
+              //                 </div>
+              //               </div>
+              //             </div>
               <div key={tier.name} className={`relative group bg-white rounded-2xl hover:shadow-lg hover:border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-fit hover:border-primary bg-primary/5`}>
                 {/* Popular Badge */}
                 {/* {tier.isPopular && (
@@ -197,11 +213,20 @@ export default function PricingCards() {
                     </div>
                   </div>
 
-                  {count > 0 && (
+                  {/* {count > 0 && (
                     <div className="flex justify-center mb-6">
                       <div className="inline-flex items-center gap-2  text-primary text-xs font-medium px-3 py-1 ">{count} people already joined the waitlist</div>
                     </div>
-                  )}
+                  )} */}
+                  {isLoading ? (
+                    <div className="flex justify-center mb-6">
+                      <div className="h-4 w-40 rounded bg-gray-200 animate-pulse" />
+                    </div>
+                  ) : count && count > 0 ? (
+                    <div className="flex justify-center mb-6">
+                      <div className="inline-flex items-center gap-2 text-primary text-xs font-medium px-3 py-1">{count} people already joined the waitlist</div>
+                    </div>
+                  ) : null}
 
                   {/* CTA Button */}
                   <WaitlistDialog
@@ -209,6 +234,7 @@ export default function PricingCards() {
                     buttonText={tier.buttonText}
                     subscriptionType={tier.name.toLowerCase()}
                     buttonClassName={`w-full py-3 text-base font-semibold transition-all duration-300 hover:scale-105 ${tier.isPopular ? 'bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-primary/90 text-white' : 'bg-[linear-gradient(to_right,#16AF9D_0%,#0B3029_100%)] hover:bg-gray-800 text-white'}`}
+                    onSuccess={handleWaitlistSuccess}
                   />
                 </div>
               </div>
