@@ -36,6 +36,13 @@ export default function UploadFilesSection() {
   // const [reportCategory, setReportCategory] = useState('')
   // const [reportNotes, setReportNotes] = useState('')
 
+    const [reportMeta, setReportMeta] = useState<{
+    reportTitle: string
+    reportDate: Date
+    reportCategory: string
+    reportNotes?: string
+  } | null>(null)
+
   const [uploadFile, { isLoading }] = useUploadFileMutation()
 
   const {
@@ -76,6 +83,13 @@ export default function UploadFilesSection() {
         reportNotes: data.reportNotes,
         reportDate: moment(data.reportDate).toISOString(),
       }).unwrap()
+      setReportMeta({
+        reportTitle: data.reportTitle,
+        reportDate: data.reportDate,
+        reportCategory: data.reportCategory,
+        reportNotes: data.reportNotes,
+      })
+
       setFileIds([...fileIds, ...response.filter((item: any) => item?.id && item?.status === 'ready').map((item: any) => item?.id)])
       sendEvent(ANALYTICS_EVENTS.DOCUMENT_UPLOADED, { category: data.reportCategory })
       setUploadComplete(true)
@@ -316,10 +330,10 @@ export default function UploadFilesSection() {
               //   uploadedFiles={uploadedFiles}
               // />
               <FilesUploadedSection
-                reportTitle={reportTitle}
-                reportDate={reportDate}
-                reportCategory={reportCategory}
-                reportNotes={reportNotes}
+                reportTitle={reportMeta?.reportTitle || ''}
+                reportDate={reportMeta?.reportDate || new Date}
+                reportCategory={reportMeta?.reportCategory || ''}
+                reportNotes={reportMeta?.reportNotes}
                 uploadedFiles={uploadedFiles}
                 uploadingFile={isLoading}
                 setUploadedFiles={setUploadedFiles}

@@ -21,6 +21,8 @@ import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, Dialog
 const waitlistSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
 
+  name: z.string().min(2, {message: 'Name will be greater than two characters'}),
+
   health_goal: z.enum(['athletic', 'chronic', 'proactive', 'weight', 'sleep', 'other'], {
     required_error: 'Please select your primary health goal',
   }),
@@ -86,6 +88,7 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
     // mode: 'onChange',
     defaultValues: {
       email: '',
+      name: '',
       health_goal: undefined,
       features: [],
       pricing_expectation: undefined,
@@ -232,6 +235,21 @@ export default function WaitlistDialog({ planName, buttonText = 'Join Our Waitli
           </Form> */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+{/* Name */}
+<FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="John Doe" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 {/* Email */}
                 <FormField
                   control={form.control}
